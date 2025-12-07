@@ -129,16 +129,24 @@ async function loadProducts() {
         const products = await window.apiClient.get('/products');
         
         if (!Array.isArray(products)) {
+            console.warn('⚠️ Pas un array, reçu:', products);
             throw new Error('Format invalide: expected array');
         }
 
         console.log(`📊 ${products.length} produits reçus`);
+        console.table(products);
         renderProducts(products);
         return products;
 
     } catch (error) {
         console.error('💥 ERREUR CRITIQUE:', error);
         showError(`Impossible de charger les produits: ${error.message}`);
+        
+        // Afficher un message d'erreur sur la page
+        const sections = document.querySelectorAll('.product-section .product-grid');
+        sections.forEach(grid => {
+            grid.innerHTML = `<p style="color: #ff6b3d; text-align: center; padding: 20px;">⚠️ ${error.message}</p>`;
+        });
         return [];
     }
 }
