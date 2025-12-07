@@ -270,10 +270,13 @@
     </div>
 
     <script>
-        // Configuration API
+        // Configuration API - Auto-détection
+        const currentOrigin = window.location.origin;
         const API_URLs = [
+            `${currentOrigin}/api`,  // Utilise l'origine actuelle
             'http://localhost:3000/api',
-            'http://172.29.192.1:3000/api'
+            'http://172.29.192.1:3000/api',
+            'https://l1-v46y.onrender.com/api'
         ];
 
         async function callAPI(endpoint, method = 'GET', body = null) {
@@ -282,6 +285,7 @@
             for (let url of API_URLs) {
                 try {
                     const fullUrl = `${url}${endpoint}`;
+                    console.log(`🔗 Trying: ${fullUrl}`);
                     const response = await fetch(fullUrl, {
                         method,
                         headers: { 'Content-Type': 'application/json' },
@@ -290,6 +294,7 @@
                     });
 
                     if (response.ok) {
+                        console.log(`✅ Succès: ${fullUrl}`);
                         return await response.json();
                     }
                 } catch (e) {
