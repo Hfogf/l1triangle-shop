@@ -457,13 +457,220 @@ body{
     box-shadow: 0 8px 20px rgba(255,107,61,0.3);
 }
 
-@media(max-width:600px){
-    .topbar{
-        flex-wrap:wrap;gap:8px
+/* ==================== RESPONSIVE MOBILE/TABLETTE ==================== */
+
+/* SMARTPHONES (iPhone, Android) - Portrait */
+@media(max-width:480px){
+    body{
+        font-size:14px;
     }
+    
+    .topbar{
+        flex-direction:column;
+        padding:12px 4%;
+        gap:10px;
+    }
+    
+    .logo-area{
+        font-size:16px;
+        width:100%;
+        justify-content:center;
+    }
+    
+    .nav-links{
+        width:100%;
+        justify-content:center;
+        gap:12px;
+        font-size:12px;
+        flex-wrap:wrap;
+    }
+    
+    .cart-button{
+        width:100%;
+        padding:10px;
+        font-size:14px;
+    }
+    
+    /* Catégories responsive */
+    .product-wrapper{
+        padding:0 3% 30px;
+    }
+    
+    .product-tabs{
+        gap:6px;
+        padding:8px 0 12px;
+        justify-content:flex-start;
+        overflow-x:auto;
+        flex-wrap:nowrap;
+        -webkit-overflow-scrolling:touch;
+    }
+    
+    .product-tab{
+        white-space:nowrap;
+        font-size:11px;
+        padding:6px 12px;
+    }
+    
+    /* Grille produits 1 colonne sur petit écran */
+    .product-grid{
+        grid-template-columns:1fr !important;
+        gap:15px;
+    }
+    
+    .product-card{
+        max-width:100%;
+    }
+    
+    .product-card img{
+        height:200px;
+    }
+    
+    /* Panier modal */
+    .panier-modal-content{
+        width:95%;
+        max-width:95%;
+        padding:15px;
+        margin:10px;
+    }
+    
+    .panier-item{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:10px;
+    }
+    
+    .panier-item-info{
+        width:100%;
+    }
+    
+    .quantity-controls{
+        justify-content:space-between;
+        width:100%;
+    }
+    
+    /* Footer */
     .footer-container{
-        grid-template-columns: 1fr;
-        gap: 25px;
+        grid-template-columns:1fr;
+        gap:20px;
+        padding:30px 5%;
+    }
+}
+
+/* SMARTPHONES - Paysage (landscape) */
+@media(min-width:481px) and (max-width:767px){
+    .topbar{
+        padding:12px 5%;
+        flex-wrap:wrap;
+    }
+    
+    .logo-area{
+        order:1;
+        flex:1;
+    }
+    
+    .cart-button{
+        order:2;
+    }
+    
+    .nav-links{
+        order:3;
+        width:100%;
+        justify-content:center;
+        margin-top:8px;
+    }
+    
+    .product-wrapper{
+        padding:0 4% 40px;
+    }
+    
+    .product-grid{
+        grid-template-columns:repeat(2, 1fr) !important;
+        gap:15px;
+    }
+    
+    .footer-container{
+        grid-template-columns:repeat(2, 1fr);
+        gap:25px;
+    }
+}
+
+/* TABLETTES (iPad, Android tablets) - Portrait */
+@media(min-width:768px) and (max-width:1024px){
+    .topbar{
+        padding:12px 5%;
+    }
+    
+    .logo-area{
+        font-size:14px;
+    }
+    
+    .nav-links{
+        gap:15px;
+        font-size:13px;
+    }
+    
+    .product-wrapper{
+        padding:0 5% 45px;
+    }
+    
+    .product-tabs{
+        gap:8px;
+        padding:10px 0 14px;
+    }
+    
+    .product-tab{
+        font-size:11px;
+        padding:6px 12px;
+    }
+    
+    .product-grid{
+        grid-template-columns:repeat(2, 1fr) !important;
+        gap:18px;
+    }
+    
+    .product-card img{
+        height:220px;
+    }
+    
+    .panier-modal-content{
+        width:85%;
+        max-width:600px;
+    }
+    
+    .footer-container{
+        grid-template-columns:repeat(2, 1fr);
+        gap:30px;
+    }
+}
+
+/* TABLETTES - Paysage (landscape) */
+@media(min-width:1025px) and (max-width:1280px){
+    .product-grid{
+        grid-template-columns:repeat(3, 1fr) !important;
+        gap:20px;
+    }
+    
+    .footer-container{
+        grid-template-columns:repeat(3, 1fr);
+    }
+}
+
+/* Amélioration touch pour tous les appareils mobiles */
+@media(hover:none) and (pointer:coarse){
+    .product-tab,
+    .cart-button,
+    .add-to-cart,
+    button{
+        min-height:44px; /* Taille minimale recommandée Apple/Google */
+        touch-action:manipulation;
+    }
+    
+    .product-card{
+        transform:none; /* Pas d'effet hover sur mobile */
+    }
+    
+    .product-card:active{
+        transform:scale(0.98);
     }
 }
 

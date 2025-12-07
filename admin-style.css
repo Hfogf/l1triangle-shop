@@ -476,8 +476,183 @@ body{
     margin-top:25px;
 }
 
-/* RESPONSIVE */
-@media(max-width:768px){
+/* ==================== RESPONSIVE ADMIN MOBILE/TABLETTE ==================== */
+
+/* SMARTPHONES (iPhone, Android) - Portrait */
+@media(max-width:480px){
+    body{
+        font-size:14px;
+    }
+    
+    /* Login page */
+    .login-container{
+        padding:15px;
+    }
+    
+    .login-box{
+        padding:25px 20px;
+    }
+    
+    .logo-section h1{
+        font-size:22px;
+    }
+    
+    .form-group input{
+        padding:12px;
+        font-size:16px; /* Évite zoom auto sur iPhone */
+    }
+    
+    .login-btn{
+        padding:12px;
+        font-size:15px;
+    }
+    
+    /* Dashboard responsive */
+    .admin-container{
+        flex-direction:column;
+    }
+    
+    .sidebar{
+        width:100%;
+        min-height:auto;
+        border-right:none;
+        border-bottom:1px solid rgba(255,255,255,.08);
+        padding:15px;
+    }
+    
+    .logo-header{
+        margin-bottom:15px;
+    }
+    
+    .logo-header h1{
+        font-size:18px;
+    }
+    
+    .menu-item{
+        padding:10px 12px;
+        font-size:13px;
+    }
+    
+    .logout-btn{
+        padding:10px;
+        font-size:13px;
+    }
+    
+    /* Main content */
+    .main-content{
+        padding:15px;
+    }
+    
+    .page-header h2{
+        font-size:20px;
+    }
+    
+    .header-actions{
+        flex-direction:column;
+        width:100%;
+        gap:8px;
+    }
+    
+    .search-bar{
+        width:100%;
+    }
+    
+    .search-bar input{
+        width:100%;
+        font-size:14px;
+    }
+    
+    .btn-primary,
+    .btn-secondary{
+        width:100%;
+        padding:10px;
+        font-size:14px;
+    }
+    
+    /* Cartes statistiques */
+    .stats-grid{
+        grid-template-columns:1fr;
+        gap:12px;
+    }
+    
+    .stat-card{
+        padding:15px;
+    }
+    
+    /* Tableau responsive */
+    .data-table-wrapper{
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+    }
+    
+    .data-table{
+        font-size:11px;
+        min-width:600px; /* Force scroll horizontal si nécessaire */
+    }
+    
+    .data-table th,
+    .data-table td{
+        padding:8px 6px;
+        white-space:nowrap;
+    }
+    
+    .action-btn{
+        padding:5px 8px;
+        font-size:11px;
+    }
+    
+    /* Modal responsive */
+    .modal-content{
+        width:95%;
+        max-width:95%;
+        margin:10px;
+        padding:20px 15px;
+        max-height:90vh;
+        overflow-y:auto;
+    }
+    
+    .modal-header h2{
+        font-size:18px;
+    }
+    
+    .form-row{
+        grid-template-columns:1fr;
+        gap:12px;
+    }
+    
+    .form-field input,
+    .form-field select,
+    .form-field textarea{
+        padding:10px;
+        font-size:16px; /* Évite zoom auto sur iPhone */
+    }
+    
+    .form-field textarea{
+        min-height:100px;
+    }
+    
+    .modal-actions{
+        flex-direction:column;
+        gap:8px;
+    }
+    
+    .modal-actions button{
+        width:100%;
+        padding:12px;
+    }
+    
+    /* Image upload */
+    .image-upload-area{
+        min-height:120px;
+    }
+    
+    .image-preview{
+        max-height:150px;
+    }
+}
+
+/* SMARTPHONES - Paysage */
+@media(min-width:481px) and (max-width:767px){
     .admin-container{
         flex-direction:column;
     }
@@ -492,12 +667,126 @@ body{
         padding:20px;
     }
     
+    .stats-grid{
+        grid-template-columns:repeat(2, 1fr);
+    }
+    
     .data-table{
         font-size:12px;
     }
     
+    .form-row{
+        grid-template-columns:repeat(2, 1fr);
+    }
+    
+    .modal-content{
+        width:90%;
+        max-width:700px;
+    }
+}
+
+/* TABLETTES (iPad, Android tablets) - Portrait */
+@media(min-width:768px) and (max-width:1024px){
+    .admin-container{
+        flex-direction:row;
+    }
+    
+    .sidebar{
+        width:200px;
+        min-width:200px;
+    }
+    
+    .logo-header h1{
+        font-size:16px;
+    }
+    
+    .menu-item{
+        font-size:13px;
+        padding:10px 12px;
+    }
+    
+    .main-content{
+        padding:25px;
+    }
+    
+    .page-header h2{
+        font-size:22px;
+    }
+    
+    .stats-grid{
+        grid-template-columns:repeat(2, 1fr);
+        gap:15px;
+    }
+    
+    .data-table{
+        font-size:13px;
+    }
+    
     .data-table th,
     .data-table td{
-        padding:8px;
+        padding:10px 8px;
+    }
+    
+    .form-row{
+        grid-template-columns:repeat(2, 1fr);
+        gap:15px;
+    }
+    
+    .modal-content{
+        width:85%;
+        max-width:650px;
+    }
+}
+
+/* TABLETTES - Paysage */
+@media(min-width:1025px) and (max-width:1280px){
+    .sidebar{
+        width:220px;
+    }
+    
+    .stats-grid{
+        grid-template-columns:repeat(4, 1fr);
+    }
+    
+    .form-row{
+        grid-template-columns:repeat(2, 1fr);
+    }
+}
+
+/* Amélioration touch pour appareils tactiles */
+@media(hover:none) and (pointer:coarse){
+    .menu-item,
+    .btn-primary,
+    .btn-secondary,
+    .action-btn,
+    button{
+        min-height:44px;
+        touch-action:manipulation;
+    }
+    
+    .menu-item:active{
+        transform:scale(0.98);
+    }
+    
+    /* Amélioration des input sur mobile */
+    input,select,textarea{
+        -webkit-appearance:none;
+        appearance:none;
+    }
+    
+    input[type="file"]{
+        padding:10px;
+    }
+}
+
+/* Support notch iPhone X et plus récents */
+@supports(padding:env(safe-area-inset-top)){
+    .admin-container{
+        padding-left:env(safe-area-inset-left);
+        padding-right:env(safe-area-inset-right);
+    }
+    
+    .sidebar{
+        padding-top:calc(15px + env(safe-area-inset-top));
     }
 }
