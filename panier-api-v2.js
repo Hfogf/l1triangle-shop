@@ -522,7 +522,10 @@ function setupCartActions() {
 }
 
 function sendToWhatsApp() {
-    if (cart.length === 0) {
+    // Recharger le cart depuis localStorage pour s'assurer qu'on a les données fraiches
+    const currentCart = JSON.parse(localStorage.getItem('cart')) || [];
+    
+    if (currentCart.length === 0) {
         alert('⚠️ Votre panier est vide!');
         return;
     }
@@ -533,51 +536,85 @@ function sendToWhatsApp() {
         return;
     }
     
-    // Créer le message (on encode à la fin pour éviter les erreurs de format)
-    let rawMessage = `🛍️ Nouvelle commande ${CONTACT_CONFIG.shopName}\n\n`;
+    console.log('🛒 Panier pour WhatsApp:', currentCart);
     
-    cart.forEach((item, index) => {
-        rawMessage += `${index + 1}. ${item.name}\n`;
+    // Créer le message avec les produits du panier
+    let rawMessage = `🛍️ *Nouvelle commande ${CONTACT_CONFIG.shopName}*\n\n`;
+    
+    currentCart.forEach((item, index) => {
+        const subtotal = (item.price * item.quantity).toFixed(2);
+        rawMessage += `${index + 1}. *${item.name}*\n`;
         rawMessage += `   Quantité: ${item.quantity}\n`;
-        rawMessage += `   Prix unitaire: ${item.price}$\n`;
-        rawMessage += `   Sous-total: ${(item.price * item.quantity).toFixed(2)}$\n\n`;
+        rawMessage += `   Prix: ${item.price}$ x ${item.quantity}\n`;
+        rawMessage += `   Sous-total: ${subtotal}$\n\n`;
     });
     
-    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    rawMessage += `TOTAL: ${total.toFixed(2)}$\n\n`;
-    rawMessage += `📱 Merci de votre commande!`;
+    const total = currentCart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2);
+    rawMessage += `💰 *TOTAL: ${total}$*\n\n`;
+    rawMessage += `📱 Merci de votre commande!\n`;
+    rawMessage += `Contact: ${CONTACT_CONFIG.shopName}`;
+    
+    console.log('📝 Message WhatsApp complet:', rawMessage);
     
     // Encodage propre pour WhatsApp
     const encoded = encodeURIComponent(rawMessage);
     const whatsappUrl = `https://wa.me/${targetNumber}?text=${encoded}`;
+    
+    console.log('🔗 URL WhatsApp:', whatsappUrl);
     window.open(whatsappUrl, '_blank');
     
-    console.log('📱 Commande envoyée sur WhatsApp');
+    // Nettoyer le panier après envoi
+    setTimeout(() => {
+        localStorage.removeItem('cart');
+        cart = [];
+        updateCart();
+        alert('✅ Commande envoyée! Panier vidé.');
+    }, 1000);
 }
 
 function sendToEmail() {
-    if (cart.length === 0) {
+    // Recharger le cart depuis localStorage
+    const currentCart = JSON.parse(localStorage.getItem('cart')) || [];
+    
+    if (currentCart.length === 0) {
         alert('⚠️ Votre panier est vide!');
         return;
     }
     
+    console.log('🛒 Panier pour Email:', currentCart);
+    
     const subject = `Nouvelle commande - ${CONTACT_CONFIG.shopName}`;
     let body = `Bonjour,\n\nJe souhaite commander les articles suivants:\n\n`;
     
-    cart.forEach((item, index) => {
+    currentCart.forEach((item, index) => {
+        const subtotal = (item.price * item.quantity).toFixed(2);
         body += `${index + 1}. ${item.name}\n`;
         body += `   Quantité: ${item.quantity}\n`;
-        body += `   Prix: ${item.price}$ x ${item.quantity} = ${(item.price * item.quantity).toFixed(2)}$\n\n`;
+        body += `   Prix: ${item.price}$ x ${item.quantity} = ${subtotal}$\n\n`;
     });
     
-    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    body += `TOTAL: ${total.toFixed(2)}$\n\n`;
-    body += `Merci!`;
+    const total = currentCart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2);
+    body += `\n━━━━━━━━━━━━━━━━━━━\n`;
+    body += `TOTAL: ${total}$\n`;
+    body += `━━━━━━━━━━━━━━━━━━━\n\n`;
+    body += `Merci!\n\n`;
+    body += `---\n`;
+    body += `${CONTACT_CONFIG.shopName}`;
+    
+    console.log('📝 Message Email complet:', body);
     
     const encodedSubject = encodeURIComponent(subject);
     const encodedBody = encodeURIComponent(body);
     const mailtoUrl = `mailto:${CONTACT_CONFIG.email}?subject=${encodedSubject}&body=${encodedBody}`;
+    
+    console.log('🔗 URL Email:', mailtoUrl);
     window.location.href = mailtoUrl;
     
-    console.log('📧 Commande envoyée par email');
+    // Nettoyer le panier après envoi
+    setTimeout(() => {
+        localStorage.removeItem('cart');
+        cart = [];
+        updateCart();
+        alert('✅ Commande envoyée! Panier vidé.');
+    }, 1000);
 }

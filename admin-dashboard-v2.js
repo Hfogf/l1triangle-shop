@@ -108,61 +108,34 @@ function showDashboard() {
             
             <style>
                 * { margin: 0; padding: 0; box-sizing: border-box; }
-                body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto; background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%); color: #e8e8e8; display: flex; min-height: 100vh; }
+                body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto; background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%); color: #e8e8e8; display: flex; flex-direction: column; min-height: 100vh; }
                 
-                /* ============ LAYOUT RESPONSIVE ============ */
-                .admin-container { display: flex; width: 100%; min-height: 100vh; position: relative; }
-                
-                /* Bouton toggle mobile */
-                .sidebar-toggle { 
-                    display: none; 
-                    position: fixed; 
-                    top: 15px; 
-                    left: 15px; 
-                    z-index: 1002; 
-                    background: #ff6b3d; 
-                    border: none; 
-                    color: white; 
-                    width: 40px; 
-                    height: 40px; 
-                    border-radius: 8px; 
-                    cursor: pointer; 
-                    font-size: 20px;
-                    box-shadow: 0 4px 12px rgba(255,107,61,0.4);
+                .admin-container { 
+                    display: flex; 
+                    width: 100%; 
+                    flex: 1;
+                    position: relative;
                 }
                 
-                /* Overlay pour fermer sidebar sur mobile */
-                .sidebar-overlay {
-                    display: none;
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-                    background: rgba(0,0,0,0.6);
-                    z-index: 1000;
-                }
-                
-                /* SIDEBAR COMPACTE - 20% de l'écran max */
+                /* SIDEBAR - DESKTOP ONLY */
                 .sidebar { 
-                    width: 140px; 
-                    min-width: 140px;
-                    max-width: 15%;
+                    width: 160px;
+                    min-width: 160px;
                     background: linear-gradient(180deg, rgba(20, 25, 40, 0.98) 0%, rgba(15, 20, 35, 0.98) 100%); 
                     border-right: 1px solid rgba(255, 107, 61, 0.15); 
-                    padding: 12px 8px; 
+                    padding: 15px 10px; 
                     display: flex; 
                     flex-direction: column; 
-                    gap: 10px;
+                    gap: 12px;
                     overflow-y: auto;
-                    transition: transform 0.3s ease;
+                    order: 1;
                 }
                 
-                .sidebar h2 { font-size: 14px; color: #ff6b3d; margin-bottom: 2px; letter-spacing: 0.5px; }
-                .sidebar p { font-size: 9px !important; opacity: 0.8; }
+                .sidebar h2 { font-size: 14px; color: #ff6b3d; margin-bottom: 2px; }
+                .sidebar p { font-size: 9px; opacity: 0.8; }
                 .sidebar-menu { display: flex; flex-direction: column; gap: 5px; flex: 1; }
                 .menu-item { 
-                    padding: 8px 6px; 
+                    padding: 8px 8px; 
                     background: rgba(255, 107, 61, 0.08); 
                     border: 1.5px solid rgba(255, 107, 61, 0.15); 
                     color: rgba(255, 177, 151, 0.85); 
@@ -171,34 +144,205 @@ function showDashboard() {
                     font-size: 10px; 
                     font-weight: 500; 
                     transition: all 0.25s; 
-                    white-space: nowrap; 
                     text-align: center;
-                    line-height: 1.3;
                 }
-                .menu-item:hover { background: rgba(255, 107, 61, 0.12); border-color: rgba(255, 107, 61, 0.35); color: #ffb197; }
-                .menu-item.active { background: linear-gradient(135deg, rgba(255, 107, 61, 0.25), rgba(255, 107, 61, 0.12)); border-color: #ff6b3d; color: #ff9966; box-shadow: inset 0 0 12px rgba(255, 107, 61, 0.15); }
+                .menu-item:hover { background: rgba(255, 107, 61, 0.12); border-color: #ff6b3d; }
+                .menu-item.active { background: rgba(255, 107, 61, 0.25); border-color: #ff6b3d; color: #ff9966; }
                 .logout-btn { 
-                    padding: 8px 6px; 
-                    background: linear-gradient(135deg, rgba(255, 107, 61, 0.15), rgba(255, 107, 61, 0.08)); 
+                    padding: 8px; 
+                    background: rgba(255, 107, 61, 0.1); 
                     border: 1.5px solid rgba(255, 107, 61, 0.3); 
                     color: #ff9966; 
                     border-radius: 5px; 
                     cursor: pointer; 
                     font-weight: 600; 
                     font-size: 10px; 
-                    transition: all 0.3s; 
-                    text-align: center;
+                    transition: all 0.3s;
                 }
-                .logout-btn:hover { background: linear-gradient(135deg, #ff6b3d, rgba(255, 107, 61, 0.7)); border-color: #ff6b3d; color: #fff; }
+                .logout-btn:hover { background: #ff6b3d; color: #fff; }
                 
-                /* CONTENU PRINCIPAL - 85% de l'écran */
+                /* CONTENU PRINCIPAL */
                 .main-content { 
                     flex: 1; 
-                    width: 85%; 
                     overflow-y: auto; 
-                    padding: 20px 25px; 
+                    padding: 25px; 
                     background: linear-gradient(135deg, rgba(5, 6, 8, 0.5) 0%, rgba(15, 25, 40, 0.5) 100%); 
+                    order: 2;
                 }
+                
+                .content-header h1 { font-size: 24px; color: #ff6b3d; margin-bottom: 8px; font-weight: 600; }
+                .content-header p { color: rgba(255, 177, 151, 0.65); font-size: 12px; }
+                .section { display: none; animation: fadeIn 0.3s ease-out; }
+                .section.active { display: block; }
+                @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+                .section-card { background: linear-gradient(135deg, rgba(30, 40, 60, 0.6), rgba(20, 30, 50, 0.4)); border: 1px solid rgba(255, 107, 61, 0.12); border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+                h2 { font-size: 16px; color: #ff9966; margin-bottom: 15px; font-weight: 600; }
+                h3 { font-size: 14px; color: #ffb197; margin: 15px 0 12px 0; }
+                h4 { color: #ff9966; margin-bottom: 6px; font-size: 13px; }
+                .form-group { margin-bottom: 14px; }
+                label { display: block; margin-bottom: 5px; font-weight: 600; color: #ffb197; font-size: 11px; text-transform: uppercase; }
+                input, textarea, select { width: 100%; padding: 10px 12px; border: 1px solid rgba(255, 107, 61, 0.2); background: rgba(255, 255, 255, 0.04); color: #e8e8e8; border-radius: 6px; font-size: 13px; font-family: inherit; }
+                input:focus, textarea:focus, select:focus { outline: none; border-color: #ff6b3d; background: rgba(255, 107, 61, 0.08); }
+                textarea { resize: vertical; min-height: 80px; }
+                .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+                button { padding: 10px 18px; background: linear-gradient(135deg, #ff6b3d, rgba(255, 107, 61, 0.8)); border: none; color: #fff; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 12px; transition: all 0.3s; }
+                button:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(255,107,61,0.4); }
+                table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 12px; }
+                table th { background: rgba(255, 107, 61, 0.1); padding: 10px; color: #ff9966; font-weight: 600; }
+                table td { padding: 10px; border-bottom: 1px solid rgba(255, 107, 61, 0.08); }
+                .loading { color: #ff6b3d; font-weight: 600; }
+                
+                /* ============ MOBILE - NAV EN BAS ============ */
+                @media(max-width: 768px) {
+                    .admin-container {
+                        flex-direction: column;
+                        padding-bottom: 70px;
+                    }
+                    
+                    .sidebar {
+                        position: fixed;
+                        bottom: 0;
+                        left: 0;
+                        right: 0;
+                        width: 100%;
+                        height: 65px;
+                        padding: 0;
+                        border-right: none;
+                        border-top: 1px solid rgba(255, 107, 61, 0.15);
+                        flex-direction: row;
+                        gap: 0;
+                        z-index: 1000;
+                        order: -1;
+                    }
+                    
+                    .sidebar h2 {
+                        display: none;
+                    }
+                    
+                    .sidebar p {
+                        display: none;
+                    }
+                    
+                    .sidebar-menu {
+                        flex-direction: row;
+                        flex: 1;
+                        gap: 0;
+                        align-items: center;
+                        justify-content: space-around;
+                        padding: 0 5px;
+                    }
+                    
+                    .menu-item {
+                        flex: 1;
+                        padding: 8px 5px;
+                        margin: 0;
+                        border: none;
+                        background: transparent;
+                        font-size: 11px;
+                        border-radius: 0;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        height: 65px;
+                        border-top: 3px solid transparent;
+                        transition: all 0.2s;
+                    }
+                    
+                    .menu-item:hover {
+                        background: rgba(255, 107, 61, 0.1);
+                        border-top-color: rgba(255, 107, 61, 0.3);
+                    }
+                    
+                    .menu-item.active {
+                        background: rgba(255, 107, 61, 0.15);
+                        border-top-color: #ff6b3d;
+                        color: #ff6b3d;
+                    }
+                    
+                    .logout-btn {
+                        display: none;
+                    }
+                    
+                    .main-content {
+                        padding: 15px;
+                        order: 1;
+                    }
+                    
+                    .content-header h1 { 
+                        font-size: 18px; 
+                    }
+                    
+                    .form-row {
+                        grid-template-columns: 1fr;
+                    }
+                    
+                    .section-card {
+                        padding: 12px;
+                        margin-bottom: 12px;
+                    }
+                    
+                    input, textarea, select {
+                        font-size: 16px;
+                        padding: 11px;
+                    }
+                    
+                    button {
+                        width: 100%;
+                        padding: 12px;
+                        font-size: 13px;
+                        margin-top: 5px;
+                    }
+                    
+                    label {
+                        font-size: 11px;
+                    }
+                    
+                    h2 {
+                        font-size: 15px;
+                    }
+                    
+                    table {
+                        font-size: 10px;
+                        overflow-x: auto;
+                    }
+                    
+                    table th, table td {
+                        padding: 6px;
+                        font-size: 9px;
+                    }
+                }
+                
+                /* TABLETS */
+                @media(min-width: 769px) and (max-width: 1024px) {
+                    .sidebar {
+                        width: 130px;
+                    }
+                    
+                    .main-content {
+                        padding: 18px;
+                    }
+                    
+                    .form-row {
+                        grid-template-columns: 1fr 1fr;
+                    }
+                }
+                
+                /* DESKTOP */
+                @media(min-width: 1025px) {
+                    .sidebar {
+                        width: 160px;
+                    }
+                    
+                    .main-content {
+                        padding: 25px 35px;
+                    }
+                    
+                    .form-row {
+                        grid-template-columns: 1fr 1fr;
+                    }
+                }
+            </style>
                 .content-header h1 { font-size: 24px; color: #ff6b3d; margin-bottom: 8px; font-weight: 600; }
                 .content-header p { color: rgba(255, 177, 151, 0.65); font-size: 12px; }
                 .section { display: none; animation: fadeIn 0.3s ease-out; }
@@ -223,273 +367,20 @@ function showDashboard() {
                 table tr:hover { background: rgba(255, 107, 61, 0.06); }
                 .product-item { background: linear-gradient(135deg, rgba(255, 107, 61, 0.1), rgba(255, 107, 61, 0.05)); padding: 12px; margin-bottom: 10px; border-radius: 6px; border-left: 3px solid #ff6b3d; border: 1px solid rgba(255, 107, 61, 0.15); }
                 .loading { color: #ff6b3d; font-weight: 600; font-size: 12px; }
-                
-                /* ============ RESPONSIVE MOBILE ============ */
-                
-                /* Smartphones Android/iPhone - Portrait STRICT */
-                @media(max-width: 600px) and (orientation: portrait) {
-                    .sidebar-toggle { 
-                        display: block;
-                        position: fixed;
-                        top: 10px;
-                        left: 10px;
-                        z-index: 1003;
-                    }
-                    
-                    .sidebar {
-                        position: fixed;
-                        top: 0;
-                        left: 0;
-                        width: 220px;
-                        max-width: 75%;
-                        height: 100vh;
-                        z-index: 1001;
-                        transform: translateX(-100%);
-                        box-shadow: 4px 0 15px rgba(0,0,0,0.6);
-                        padding: 15px 10px;
-                    }
-                    
-                    .sidebar.open {
-                        transform: translateX(0);
-                    }
-                    
-                    .sidebar-overlay.show {
-                        display: block;
-                        z-index: 1000;
-                    }
-                    
-                    .main-content {
-                        padding: 50px 10px 15px 10px !important;
-                        width: 100% !important;
-                        margin: 0 !important;
-                        display: block !important;
-                    }
-                    
-                    .admin-container {
-                        flex-direction: column !important;
-                    }
-                    
-                    .content-header h1 { font-size: 18px; margin-bottom: 15px; }
-                    
-                    .form-row {
-                        grid-template-columns: 1fr !important;
-                        gap: 10px;
-                    }
-                    
-                    .section-card {
-                        padding: 12px;
-                        margin-bottom: 15px;
-                    }
-                    
-                    input, textarea, select {
-                        font-size: 16px !important; /* Évite zoom iPhone */
-                        padding: 11px !important;
-                    }
-                    
-                    button {
-                        width: 100%;
-                        padding: 12px !important;
-                        font-size: 13px !important;
-                        margin-top: 5px;
-                    }
-                    
-                    label {
-                        font-size: 11px !important;
-                    }
-                    
-                    h2 {
-                        font-size: 15px !important;
-                    }
-                    
-                    table {
-                        font-size: 10px;
-                        display: block;
-                        overflow-x: auto;
-                        -webkit-overflow-scrolling: touch;
-                    }
-                    
-                    table th, table td {
-                        padding: 6px 4px;
-                        white-space: nowrap;
-                        font-size: 9px;
-                    }
-                }
-                
-                /* Smartphones - Paysage STRICT */
-                @media(max-width: 900px) and (orientation: landscape) {
-                    .sidebar-toggle { 
-                        display: block;
-                        position: fixed;
-                        top: 8px;
-                        left: 8px;
-                        width: 35px;
-                        height: 35px;
-                        font-size: 18px;
-                        z-index: 1003;
-                    }
-                    
-                    .sidebar {
-                        position: fixed;
-                        top: 0;
-                        left: 0;
-                        width: 160px;
-                        max-width: 35%;
-                        height: 100vh;
-                        z-index: 1001;
-                        transform: translateX(-100%);
-                        box-shadow: 4px 0 12px rgba(0,0,0,0.4);
-                        padding: 12px 8px;
-                    }
-                    
-                    .sidebar.open {
-                        transform: translateX(0);
-                    }
-                    
-                    .sidebar-overlay.show {
-                        display: block;
-                        z-index: 1000;
-                    }
-                    
-                    .sidebar h2 {
-                        font-size: 12px;
-                    }
-                    
-                    .menu-item {
-                        font-size: 9px;
-                        padding: 7px 5px;
-                    }
-                    
-                    .logout-btn {
-                        font-size: 9px;
-                        padding: 7px 5px;
-                    }
-                    
-                    .main-content {
-                        padding: 45px 12px 12px 12px !important;
-                        width: 100% !important;
-                        margin: 0 !important;
-                    }
-                    
-                    .admin-container {
-                        flex-direction: column !important;
-                    }
-                    
-                    .content-header h1 { font-size: 16px; margin-bottom: 10px; }
-                    
-                    .form-row {
-                        grid-template-columns: 1fr 1fr;
-                        gap: 10px;
-                    }
-                    
-                    .section-card {
-                        padding: 10px;
-                        margin-bottom: 10px;
-                    }
-                    
-                    input, textarea, select {
-                        font-size: 14px;
-                        padding: 8px !important;
-                    }
-                    
-                    button {
-                        padding: 8px !important;
-                        font-size: 12px !important;
-                    }
-                    
-                    h2 {
-                        font-size: 13px !important;
-                    }
-                    
-                    table {
-                        font-size: 9px;
-                    }
-                    
-                    table th, table td {
-                        padding: 5px 3px;
-                    }
-                }
-                
-                /* Tablettes iPad/Android - Portrait */
-                @media(min-width: 768px) and (max-width: 1024px) {
-                    .sidebar {
-                        width: 130px;
-                        min-width: 130px;
-                        max-width: 15%;
-                        padding: 12px 8px;
-                    }
-                    
-                    .sidebar h2 {
-                        font-size: 13px;
-                    }
-                    
-                    .menu-item, .logout-btn {
-                        font-size: 9px;
-                        padding: 7px 5px;
-                    }
-                    
-                    .main-content {
-                        padding: 18px;
-                        width: 85%;
-                    }
-                    
-                    .form-row {
-                        grid-template-columns: 1fr 1fr;
-                    }
-                }
-                
-                /* Tablettes - Paysage + Desktop small */
-                @media(min-width: 1025px) and (max-width: 1366px) {
-                    .sidebar {
-                        width: 140px;
-                        min-width: 140px;
-                        max-width: 15%;
-                    }
-                    
-                    .main-content {
-                        width: 85%;
-                    }
-                    
-                    .form-row {
-                        grid-template-columns: 1fr 1fr;
-                    }
-                }
-                
-                /* Desktop large */
-                @media(min-width: 1367px) {
-                    .sidebar {
-                        width: 160px;
-                        min-width: 160px;
-                        max-width: 15%;
-                    }
-                    
-                    .main-content {
-                        width: 85%;
-                        padding: 25px 35px;
-                    }
-                    
-                    .form-row {
-                        grid-template-columns: 1fr 1fr;
-                    }
-                }
+
             </style>
-            
-            <!-- Bouton toggle sidebar mobile -->
-            <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
-            
-            <!-- Overlay pour fermer sidebar -->
-            <div class="sidebar-overlay" onclick="closeSidebar()"></div>
             
             <div class="admin-container">
                 <aside class="sidebar" id="sidebar">
                     <div>
-                        <h2>▲ L1 TRIANGLE</h2>
-                        <p style="font-size: 12px; color: rgba(255, 177, 151, 0.7);">Admin Dashboard</p>
+                        <h2>▲ L1</h2>
+                        <p>Admin</p>
                     </div>
                     
                     <nav class="sidebar-menu">
-                        <button class="menu-item active" data-tab="products" onclick="closeSidebar()">🛍️ PRODUITS</button>
-                        <button class="menu-item" data-tab="orders" onclick="closeSidebar()">📦 COMMANDES</button>
-                        <button class="menu-item" data-tab="logs" onclick="closeSidebar()">📋 LOGS</button>
+                        <button class="menu-item active" data-tab="products" onclick="switchTab('products')">🛍️ PRODUITS</button>
+                        <button class="menu-item" data-tab="orders" onclick="switchTab('orders')">📦 COMMANDES</button>
+                        <button class="menu-item" data-tab="logs" onclick="switchTab('logs')">📋 LOGS</button>
                     </nav>
                     
                     <button class="logout-btn" onclick="logout()">🚪 DÉCONNEXION</button>
@@ -703,22 +594,41 @@ async function loadLogsAdmin() {
     }
 }
 
+// ==================== NAVIGATION ====================
+
+function switchTab(tabName) {
+    // Masquer tous les tabs
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    
+    // Enlever active de tous les boutons
+    document.querySelectorAll('.menu-item').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // Afficher le tab sélectionné
+    const tabEl = document.getElementById(tabName);
+    if (tabEl) {
+        tabEl.classList.add('active');
+    }
+    
+    // Ajouter active au bouton cliqué
+    event.target.classList.add('active');
+    
+    // Charger les données
+    if (tabName === 'products') loadProductsAdmin();
+    else if (tabName === 'orders') loadOrdersAdmin();
+    else if (tabName === 'logs') loadLogsAdmin();
+}
+
 // ==================== SIDEBAR MOBILE ====================
 
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
-    const overlay = document.querySelector('.sidebar-overlay');
-    
     sidebar.classList.toggle('open');
-    overlay.classList.toggle('show');
 }
 
 function closeSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.querySelector('.sidebar-overlay');
-    
-    sidebar.classList.remove('open');
-    overlay.classList.remove('show');
+    // Sur mobile, pas besoin car nav en bas
 }
 
 // ==================== INIT ====================
