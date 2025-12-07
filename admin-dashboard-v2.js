@@ -226,25 +226,27 @@ function showDashboard() {
                 
                 /* ============ RESPONSIVE MOBILE ============ */
                 
-                /* Smartphones Android/iPhone - Portrait */
-                @media(max-width: 480px) {
+                /* Smartphones Android/iPhone - Portrait STRICT */
+                @media(max-width: 600px) and (orientation: portrait) {
                     .sidebar-toggle { 
                         display: block;
                         position: fixed;
                         top: 10px;
                         left: 10px;
+                        z-index: 1003;
                     }
                     
                     .sidebar {
                         position: fixed;
                         top: 0;
                         left: 0;
-                        width: 200px;
-                        max-width: 65%;
+                        width: 220px;
+                        max-width: 75%;
                         height: 100vh;
                         z-index: 1001;
                         transform: translateX(-100%);
-                        box-shadow: 4px 0 12px rgba(0,0,0,0.5);
+                        box-shadow: 4px 0 15px rgba(0,0,0,0.6);
+                        padding: 15px 10px;
                     }
                     
                     .sidebar.open {
@@ -253,12 +255,18 @@ function showDashboard() {
                     
                     .sidebar-overlay.show {
                         display: block;
+                        z-index: 1000;
                     }
                     
                     .main-content {
-                        padding: 55px 10px 15px 10px !important;
+                        padding: 50px 10px 15px 10px !important;
                         width: 100% !important;
                         margin: 0 !important;
+                        display: block !important;
+                    }
+                    
+                    .admin-container {
+                        flex-direction: column !important;
                     }
                     
                     .content-header h1 { font-size: 18px; margin-bottom: 15px; }
@@ -307,19 +315,30 @@ function showDashboard() {
                     }
                 }
                 
-                /* Smartphones - Paysage */
-                @media(min-width: 481px) and (max-width: 767px) {
-                    .sidebar-toggle { display: block; }
+                /* Smartphones - Paysage STRICT */
+                @media(max-width: 900px) and (orientation: landscape) {
+                    .sidebar-toggle { 
+                        display: block;
+                        position: fixed;
+                        top: 8px;
+                        left: 8px;
+                        width: 35px;
+                        height: 35px;
+                        font-size: 18px;
+                        z-index: 1003;
+                    }
                     
                     .sidebar {
                         position: fixed;
                         top: 0;
                         left: 0;
-                        width: 200px;
+                        width: 160px;
+                        max-width: 35%;
                         height: 100vh;
                         z-index: 1001;
                         transform: translateX(-100%);
-                        box-shadow: 4px 0 12px rgba(0,0,0,0.3);
+                        box-shadow: 4px 0 12px rgba(0,0,0,0.4);
+                        padding: 12px 8px;
                     }
                     
                     .sidebar.open {
@@ -328,15 +347,65 @@ function showDashboard() {
                     
                     .sidebar-overlay.show {
                         display: block;
+                        z-index: 1000;
+                    }
+                    
+                    .sidebar h2 {
+                        font-size: 12px;
+                    }
+                    
+                    .menu-item {
+                        font-size: 9px;
+                        padding: 7px 5px;
+                    }
+                    
+                    .logout-btn {
+                        font-size: 9px;
+                        padding: 7px 5px;
                     }
                     
                     .main-content {
-                        padding: 60px 15px 20px 15px;
-                        width: 100%;
+                        padding: 45px 12px 12px 12px !important;
+                        width: 100% !important;
+                        margin: 0 !important;
                     }
+                    
+                    .admin-container {
+                        flex-direction: column !important;
+                    }
+                    
+                    .content-header h1 { font-size: 16px; margin-bottom: 10px; }
                     
                     .form-row {
                         grid-template-columns: 1fr 1fr;
+                        gap: 10px;
+                    }
+                    
+                    .section-card {
+                        padding: 10px;
+                        margin-bottom: 10px;
+                    }
+                    
+                    input, textarea, select {
+                        font-size: 14px;
+                        padding: 8px !important;
+                    }
+                    
+                    button {
+                        padding: 8px !important;
+                        font-size: 12px !important;
+                    }
+                    
+                    h2 {
+                        font-size: 13px !important;
+                    }
+                    
+                    table {
+                        font-size: 9px;
+                    }
+                    
+                    table th, table td {
+                        padding: 5px 3px;
                     }
                 }
                 
