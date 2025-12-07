@@ -41,6 +41,28 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('.')); // Servir les fichiers statiques
 
+// ==================== REDIRECTIONS AUTOMATIQUES ====================
+
+// Rediriger /admin-login vers /admin-login-v2.html
+app.get('/admin-login', (req, res) => {
+    res.redirect(301, '/admin-login-v2.html');
+});
+
+// Rediriger /admin-login.html vers /admin-login-v2.html
+app.get('/admin-login.html', (req, res) => {
+    res.redirect(301, '/admin-login-v2.html');
+});
+
+// Rediriger / vers /start.html (page d'accueil)
+app.get('/', (req, res) => {
+    res.redirect(301, '/start.html');
+});
+
+// Rediriger /admin vers /admin.html
+app.get('/admin', (req, res) => {
+    res.redirect(301, '/admin.html');
+});
+
 // Logging middleware
 app.use((req, res, next) => {
     console.log(`\n${'='.repeat(70)}`);

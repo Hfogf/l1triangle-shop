@@ -192,7 +192,7 @@ function renderProducts(products) {
 
 // ==================== PANIER ====================
 
-const cart = [];
+// Variables globales panier
 let cartCountEl = document.getElementById('cart-count');
 let cartOverlay = document.getElementById('cart-overlay');
 let cartItemsEl = document.getElementById('cart-items');
@@ -201,11 +201,11 @@ let cartTotalEl = document.getElementById('cart-total');
 function attachCartButtons() {
     document.querySelectorAll('.add-to-cart').forEach(btn => {
         btn.onclick = null; // Nettoyer les anciens événements
-        btn.addEventListener('click', addToCart);
+        btn.addEventListener('click', addToCartFromButton);
     });
 }
 
-function addToCart(e) {
+function addToCartFromButton(e) {
     const card = e.target.closest('.product-card');
     const id = card.dataset.id;
     const name = decodeURIComponent(card.dataset.name);
@@ -214,51 +214,29 @@ function addToCart(e) {
 
     const existing = cart.find(item => item.id === id);
     if (existing) {
-        existing.qty++;
+        existing.quantity++;
     } else {
-        cart.push({ id, name, price, image, qty: 1 });
+        cart.push({ id, name, price, image, quantity: 1 });
     }
 
-    renderCart();
+    // Sauvegarder dans localStorage
+    localStorage.setItem('cart', JSON.stringify(cart));
+    
+    updateCart();
     cartOverlay.classList.remove('hidden');
     console.log(`✅ Produit ajouté: ${name} (total: ${cart.length})`);
 }
 
-function renderCart() {
-    if (!cartItemsEl || !cartTotalEl || !cartCountEl) return;
-
-    cartItemsEl.innerHTML = cart.map(item => `
-        <div class="cart-item" data-id="${item.id}">
-            <img src="${item.image}" alt="${item.name}" class="cart-item-img">
-            <div class="cart-item-info">
-                <h4>${item.name}</h4>
-                <span>$ ${item.price.toFixed(2)}</span>
-            </div>
-            <div class="qty-controls">
-                <button class="qty-btn minus" data-id="${item.id}">-</button>
-                <span class="qty">${item.qty}</span>
-                <button class="qty-btn plus" data-id="${item.id}">+</button>
-            </div>
-            <button class="remove-item" data-id="${item.id}">✕</button>
-        </div>
-    `).join('');
-
-    const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-    cartTotalEl.textContent = '$ ' + total.toFixed(2);
-    
-    const count = cart.reduce((sum, item) => sum + item.qty, 0);
-    cartCountEl.textContent = count;
-
-    attachCartControls();
-}
+// Supprimer renderCart - remplacée par updateCart qui est définie plus bas
 
 function attachCartControls() {
     document.querySelectorAll('.qty-btn.plus').forEach(btn => {
         btn.onclick = null;
         btn.addEventListener('click', () => {
             const item = cart.find(i => i.id === btn.dataset.id);
-            if (item) item.qty++;
-            renderCart();
+            if (item) item.quantity++;
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCart();
         });
     });
 
@@ -267,12 +245,13 @@ function attachCartControls() {
         btn.addEventListener('click', () => {
             const item = cart.find(i => i.id === btn.dataset.id);
             if (item) {
-                item.qty--;
-                if (item.qty <= 0) {
+                item.quantity--;
+                if (item.quantity <= 0) {
                     cart.splice(cart.indexOf(item), 1);
                 }
             }
-            renderCart();
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCart();
         });
     });
 
@@ -281,7 +260,8 @@ function attachCartControls() {
         btn.addEventListener('click', () => {
             const idx = cart.findIndex(i => i.id === btn.dataset.id);
             if (idx !== -1) cart.splice(idx, 1);
-            renderCart();
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCart();
         });
     });
 }
@@ -313,7 +293,8 @@ async function submitOrder(method) {
         console.log('✅ Commande sauvegardée');
         alert(`✅ Commande enregistrée!\nTotal: $ ${order.total.toFixed(2)}`);
         cart.length = 0;
-        renderCart();
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCart();
     } catch (error) {
         console.error('⚠️ Commande non sauvegardée (hors ligne):', error);
         alert(`⚠️ Commande créée mais non sauvegardée\nTotal: $ ${order.total.toFixed(2)}`);
@@ -346,6 +327,13 @@ function showError(message) {
 
 // ==================== INIT ====================
 
+// Configuration contact
+const CONTACT_CONFIG = {
+    whatsapp: '50939945994', // Numéro WhatsApp (format international sans +)
+    email: 'l1triangle@store.com', // Email de la boutique
+    shopName: 'L1 TRIANGLE Store'
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     console.log('🎯 Page chargée, initialisation');
     loadProducts();
@@ -359,6 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
         openCartBtn.addEventListener('click', () => {
             if (cartOverlay) {
                 cartOverlay.classList.remove('hidden');
+                updateCart(); // Mettre à jour le panier à l'ouverture
                 console.log('🛒 Panier ouvert');
             }
         });
@@ -382,4 +371,144 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+    
+    // Gérer les boutons WhatsApp et Email
+    setupCartActions();
 });
+
+// ==================== GESTION PANIER ====================
+
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+function updateCart() {
+    const cartItemsEl = document.getElementById('cart-items');
+    const cartTotalEl = document.getElementById('cart-total');
+    const cartCountEl = document.getElementById('cart-count');
+    
+    if (!cartItemsEl) return;
+    
+    // Compter le total des articles
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    if (cartCountEl) cartCountEl.textContent = totalItems;
+    
+    // Si le panier est vide
+    if (cart.length === 0) {
+        cartItemsEl.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">Votre panier est vide</p>';
+        if (cartTotalEl) cartTotalEl.textContent = '0.00';
+        if (cartCountEl) cartCountEl.textContent = '0';
+        return;
+    }
+    
+    // Calculer le total et le nombre d'articles
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+    
+    if (cartTotalEl) cartTotalEl.textContent = total.toFixed(2);
+    if (cartCountEl) cartCountEl.textContent = count;
+    
+    // Afficher les produits avec contrôles
+    cartItemsEl.innerHTML = cart.map(item => `
+        <div class="cart-item" data-id="${item.id}">
+            <img src="${item.image || 'https://via.placeholder.com/60'}" class="cart-item-img" alt="${item.name}">
+            <div class="cart-item-info">
+                <h4>${item.name}</h4>
+                <span>$ ${item.price.toFixed(2)}</span>
+            </div>
+            <div class="qty-controls">
+                <button class="qty-btn minus" data-id="${item.id}">-</button>
+                <span class="qty">${item.quantity}</span>
+                <button class="qty-btn plus" data-id="${item.id}">+</button>
+            </div>
+            <button class="remove-item" data-id="${item.id}">✕</button>
+        </div>
+    `).join('');
+    
+    // Réattacher les événements
+    attachCartControls();
+}
+
+function addToCart(productId) {
+    // Cette fonction sera implémentée pour ajouter au panier
+    const existingItem = cart.find(item => item.id === productId);
+    if (existingItem) {
+        existingItem.quantity++;
+    }
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCart();
+}
+
+function removeFromCart(productId) {
+    cart = cart.filter(item => item.id !== productId);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCart();
+}
+
+// ==================== WHATSAPP & EMAIL ====================
+
+function setupCartActions() {
+    const whatsappBtn = document.getElementById('cart-whatsapp');
+    const emailBtn = document.getElementById('cart-email');
+    
+    if (whatsappBtn) {
+        whatsappBtn.addEventListener('click', sendToWhatsApp);
+    }
+    
+    if (emailBtn) {
+        emailBtn.addEventListener('click', sendToEmail);
+    }
+}
+
+function sendToWhatsApp() {
+    if (cart.length === 0) {
+        alert('⚠️ Votre panier est vide!');
+        return;
+    }
+    
+    // Créer le message
+    let message = `🛍️ *Nouvelle commande ${CONTACT_CONFIG.shopName}*%0A%0A`;
+    
+    cart.forEach((item, index) => {
+        message += `${index + 1}. *${item.name}*%0A`;
+        message += `   Quantité: ${item.quantity}%0A`;
+        message += `   Prix unitaire: ${item.price}$%0A`;
+        message += `   Sous-total: ${(item.price * item.quantity).toFixed(2)}$%0A%0A`;
+    });
+    
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    message += `💰 *TOTAL: ${total.toFixed(2)}$*%0A%0A`;
+    message += `📱 Merci de votre commande!`;
+    
+    // Ouvrir WhatsApp
+    const whatsappUrl = `https://wa.me/${CONTACT_CONFIG.whatsapp}?text=${message}`;
+    window.open(whatsappUrl, '_blank');
+    
+    console.log('📱 Commande envoyée sur WhatsApp');
+}
+
+function sendToEmail() {
+    if (cart.length === 0) {
+        alert('⚠️ Votre panier est vide!');
+        return;
+    }
+    
+    // Créer le sujet et le corps du message
+    const subject = `Nouvelle commande - ${CONTACT_CONFIG.shopName}`;
+    
+    let body = `Bonjour,%0A%0AJe souhaite commander les articles suivants:%0A%0A`;
+    
+    cart.forEach((item, index) => {
+        body += `${index + 1}. ${item.name}%0A`;
+        body += `   Quantité: ${item.quantity}%0A`;
+        body += `   Prix: ${item.price}$ x ${item.quantity} = ${(item.price * item.quantity).toFixed(2)}$%0A%0A`;
+    });
+    
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    body += `TOTAL: ${total.toFixed(2)}$%0A%0A`;
+    body += `Merci!`;
+    
+    // Ouvrir le client email
+    const mailtoUrl = `mailto:${CONTACT_CONFIG.email}?subject=${subject}&body=${body}`;
+    window.location.href = mailtoUrl;
+    
+    console.log('📧 Commande envoyée par email');
+}
