@@ -152,29 +152,45 @@ async function loadProducts() {
 }
 
 function renderProducts(products) {
+    console.log('🎨 Début renderProducts avec', products.length, 'produits');
+    
     if (!products || products.length === 0) {
         console.warn('⚠️ Aucun produit à afficher');
+        const sections = document.querySelectorAll('.product-section .product-grid');
+        sections.forEach(grid => {
+            grid.innerHTML = '<p style="text-align: center; color: #999; padding: 40px;">Aucun produit disponible</p>';
+        });
         return;
     }
 
     // Grouper par catégorie
     const grouped = {};
     products.forEach(p => {
-        const cat = p.category || 'autres';
+        const cat = (p.category || 'autres').toLowerCase().trim();
         if (!grouped[cat]) grouped[cat] = [];
         grouped[cat].push(p);
     });
 
-    console.log('📑 Catégories:', Object.keys(grouped));
+    console.log('📑 Catégories trouvées:', Object.keys(grouped));
+    console.log('📊 Répartition:', grouped);
 
     // Rendre chaque catégorie
+    let totalRendered = 0;
     Object.entries(grouped).forEach(([category, items]) => {
         const section = document.getElementById(category);
-        if (!section) return;
+        if (!section) {
+            console.warn(`⚠️ Section "${category}" introuvable dans le DOM`);
+            return;
+        }
 
         const grid = section.querySelector('.product-grid');
-        if (!grid) return;
+        if (!grid) {
+            console.warn(`⚠️ .product-grid introuvable dans section "${category}"`);
+            return;
+        }
 
+        console.log(`✏️ Rendu ${items.length} produits dans "${category}"`);
+        
         grid.innerHTML = items.map(p => `
             <article class="product-card"
                      data-id="${p.id}"
@@ -185,17 +201,23 @@ function renderProducts(products) {
                      alt="${p.name}"
                      onerror="this.src='https://via.placeholder.com/300x200?text=Image'">
                 <h3>${p.name}</h3>
-                <p>${p.description || ''}</p>
+                <p>${p.description || 'Aucune description'}</p>
                 <div class="price">${parseFloat(p.price).toFixed(2)} $</div>
                 <small style="opacity:.7;">Stock: ${p.stock || 'N/A'}</small>
                 <button class="product-btn add-to-cart">Ajouter au panier</button>
             </article>
         `).join('');
-
-        attachCartButtons();
+        
+        totalRendered += items.length;
     });
 
-    console.log('✅ Interface produits mise à jour');
+    console.log(`✅ ${totalRendered} produits rendus au total`);
+    
+    // Réattacher les événements après le rendu
+    setTimeout(() => {
+        attachCartButtons();
+        console.log('✅ Boutons panier attachés');
+    }, 100);
 }
 
 // ==================== PANIER ====================

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Produits</title>
+</head>
+<body>
+    <h1>Test Chargement Produits</h1>
+    <div id="status">Chargement...</div>
+    <div id="products"></div>
+    
+    <script>
+        async function testProducts() {
+            const statusEl = document.getElementById('status');
+            const productsEl = document.getElementById('products');
+            
+            try {
+                statusEl.textContent = '🔄 Connexion à l\'API...';
+                
+                const response = await fetch('http://localhost:3000/api/products');
+                statusEl.textContent = `✅ Statut: ${response.status} ${response.statusText}`;
+                
+                const products = await response.json();
+                console.log('Produits reçus:', products);
+                
+                productsEl.innerHTML = `
+                    <h2>✅ ${products.length} produits trouvés</h2>
+                    <pre>${JSON.stringify(products, null, 2)}</pre>
+                `;
+                
+            } catch (error) {
+                statusEl.textContent = `❌ Erreur: ${error.message}`;
+                productsEl.innerHTML = `<pre style="color: red;">${error.stack}</pre>`;
+            }
+        }
+        
+        testProducts();
+    </script>
+</body>
+</html>
