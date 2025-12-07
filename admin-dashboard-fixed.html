@@ -311,18 +311,22 @@
             if (!sessionId) return null;
 
             try {
+                const fullUrl = API_BASE + endpoint;
+                console.log(`🔗 ${method} ${fullUrl}`);
+                
                 const options = {
                     method,
                     headers: {
                         'Content-Type': 'application/json',
                         'X-Session-Id': sessionId
                     },
-                    mode: 'cors'
+                    mode: 'cors',
+                    credentials: 'omit'
                 };
 
                 if (body) options.body = JSON.stringify(body);
 
-                const response = await fetch(API_BASE + endpoint, options);
+                const response = await fetch(fullUrl, options);
 
                 if (response.status === 401) {
                     sessionStorage.removeItem('admin_sessionId');
@@ -330,8 +334,14 @@
                     return null;
                 }
 
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                return await response.json();
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
+                }
+                
+                const result = await response.json();
+                console.log(`✅ Réponse reçue:`, result);
+                return result;
             } catch (error) {
                 console.error('❌ API Error:', error);
                 throw error;
@@ -355,11 +365,14 @@
             el.innerHTML = '<div class="section-card"><p class="loading">⏳ Chargement...</p></div>';
 
             try {
+                console.log('📥 Appel API pour charger les produits...');
                 const products = await apiCall('/products');
+                console.log('Produits reçus:', products);
                 
                 // Vérification de sécurité
-                if (!products || !Array.isArray(products)) {
-                    throw new Error('Erreur: Impossible de charger les produits');
+                if (!Array.isArray(products)) {
+                    console.error('❌ Les produits ne sont pas un tableau:', products);
+                    throw new Error(`Erreur API: Format invalide (reçu: ${typeof products})`);
                 }
                 
                 let html = `
@@ -440,7 +453,15 @@
                 html += '</div>';
                 el.innerHTML = html;
             } catch (error) {
-                el.innerHTML = `<div class="section-card"><div class="error">❌ ${error.message}</div></div>`;
+                console.error('❌ Erreur loadProducts:', error);
+                el.innerHTML = `<div class="section-card" style="padding: 20px;">
+                    <div style="background: rgba(255, 50, 50, 0.15); border: 1px solid rgba(255, 50, 50, 0.3); color: #ff8b8b; padding: 15px; border-radius: 8px;">
+                        <h3>❌ Erreur: Impossible de charger les produits</h3>
+                        <p>${error.message}</p>
+                        <p style="font-size: 12px; margin-top: 10px; color: rgba(255, 177, 151, 0.7);">API Base: ${API_BASE}</p>
+                        <button onclick="loadProducts()" style="margin-top: 10px; padding: 8px 16px; background: #ff6b3d; border: none; color: white; border-radius: 4px; cursor: pointer;">🔄 Réessayer</button>
+                    </div>
+                </div>`;
             }
         }
 
@@ -452,16 +473,27 @@
             try {
                 const imageBase64 = document.getElementById('imageBase64').value;
 
+                const price = parseFloat(data.get('price'));
+                const stock = parseInt(data.get('stock'));
+
+                if (Number.isNaN(price) || Number.isNaN(stock)) {
+                    throw new Error('Prix ou stock invalide');
+                }
+
                 const product = {
-                    name: data.get('name'),
+                    name: data.get('name')?.trim(),
                     category: data.get('category'),
-                    price: parseFloat(data.get('price')),
-                    stock: parseInt(data.get('stock')),
-                    description: data.get('description'),
+                    price,
+                    stock,
+                    description: data.get('description')?.trim() || '',
                     image: imageBase64 || 'https://via.placeholder.com/300x200?text=' + encodeURIComponent(data.get('name'))
                 };
 
-                await apiCall('/products', 'POST', product);
+                const result = await apiCall('/products', 'POST', product);
+                if (!result || !result.id) {
+                    throw new Error("Le serveur n'a pas confirmé l'enregistrement");
+                }
+
                 alert('✅ Produit ajouté!');
                 form.reset();
                 document.getElementById('imagePreview').style.display = 'none';

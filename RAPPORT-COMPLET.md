@@ -35,7 +35,7 @@
   - Ouvre WhatsApp Web ou l'app mobile
 
 #### 4. **Intégration Email** ✅
-- **Email:** l1triangle@store.com
+- **Email:** l1triangle.info@gmail.com
 - **Fonctionnalité:**
   - Sujet pré-rempli
   - Corps de message formaté
@@ -105,7 +105,7 @@ https://l1-v46y.onrender.com/admin.html    → Connexion admin
 ## 📱 CONTACT CLIENT
 
 **WhatsApp:** +509 39 94 57 94
-**Email:** l1triangle@store.com
+**Email:** l1triangle.info@gmail.com
 **Nom boutique:** L1 TRIANGLE Store
 
 ---

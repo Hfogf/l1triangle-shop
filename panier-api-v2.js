@@ -329,10 +329,29 @@ function showError(message) {
 
 // Configuration contact
 const CONTACT_CONFIG = {
-    whatsapp: '50939945994', // Numéro WhatsApp (format international sans +)
-    email: 'l1triangle@store.com', // Email de la boutique
+    // Numéro WhatsApp: on stocke uniquement des chiffres (pas d'espaces, pas de +)
+    // Exemple valide: 50939945794 (pays + numéro)
+    whatsapp: '50939945794',
+    whatsappCountry: '509', // préfixe pays pour recomposer si l'utilisateur saisit juste le numéro local
+    email: 'l1triangle.info@gmail.com', // Email de la boutique
     shopName: 'L1 TRIANGLE Store'
 };
+
+// Sanitize et normalise le numéro pour WhatsApp
+function formatPhoneNumber(raw) {
+    const digits = (raw || '').replace(/\D/g, '');
+    if (!digits) return '';
+    // Si l'utilisateur renseigne un numéro local (8 chiffres), on préfixe le pays
+    if (digits.length === 8 && CONTACT_CONFIG.whatsappCountry) {
+        return `${CONTACT_CONFIG.whatsappCountry}${digits}`;
+    }
+    // Si le numéro commence par 0 et fait 10 chiffres, on enlève le 0 et on préfixe
+    if (digits.length === 10 && digits.startsWith('0') && CONTACT_CONFIG.whatsappCountry) {
+        return `${CONTACT_CONFIG.whatsappCountry}${digits.slice(1)}`;
+    }
+    // Sinon on renvoie les chiffres tels quels (déjà avec indicatif normalement)
+    return digits;
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('🎯 Page chargée, initialisation');
@@ -463,23 +482,30 @@ function sendToWhatsApp() {
         alert('⚠️ Votre panier est vide!');
         return;
     }
+
+    const targetNumber = formatPhoneNumber(CONTACT_CONFIG.whatsapp);
+    if (!targetNumber) {
+        alert('❌ Numéro WhatsApp invalide. Vérifiez la configuration.');
+        return;
+    }
     
-    // Créer le message
-    let message = `🛍️ *Nouvelle commande ${CONTACT_CONFIG.shopName}*%0A%0A`;
+    // Créer le message (on encode à la fin pour éviter les erreurs de format)
+    let rawMessage = `🛍️ Nouvelle commande ${CONTACT_CONFIG.shopName}\n\n`;
     
     cart.forEach((item, index) => {
-        message += `${index + 1}. *${item.name}*%0A`;
-        message += `   Quantité: ${item.quantity}%0A`;
-        message += `   Prix unitaire: ${item.price}$%0A`;
-        message += `   Sous-total: ${(item.price * item.quantity).toFixed(2)}$%0A%0A`;
+        rawMessage += `${index + 1}. ${item.name}\n`;
+        rawMessage += `   Quantité: ${item.quantity}\n`;
+        rawMessage += `   Prix unitaire: ${item.price}$\n`;
+        rawMessage += `   Sous-total: ${(item.price * item.quantity).toFixed(2)}$\n\n`;
     });
     
     const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    message += `💰 *TOTAL: ${total.toFixed(2)}$*%0A%0A`;
-    message += `📱 Merci de votre commande!`;
+    rawMessage += `TOTAL: ${total.toFixed(2)}$\n\n`;
+    rawMessage += `📱 Merci de votre commande!`;
     
-    // Ouvrir WhatsApp
-    const whatsappUrl = `https://wa.me/${CONTACT_CONFIG.whatsapp}?text=${message}`;
+    // Encodage propre pour WhatsApp
+    const encoded = encodeURIComponent(rawMessage);
+    const whatsappUrl = `https://wa.me/${targetNumber}?text=${encoded}`;
     window.open(whatsappUrl, '_blank');
     
     console.log('📱 Commande envoyée sur WhatsApp');
@@ -491,23 +517,22 @@ function sendToEmail() {
         return;
     }
     
-    // Créer le sujet et le corps du message
     const subject = `Nouvelle commande - ${CONTACT_CONFIG.shopName}`;
-    
-    let body = `Bonjour,%0A%0AJe souhaite commander les articles suivants:%0A%0A`;
+    let body = `Bonjour,\n\nJe souhaite commander les articles suivants:\n\n`;
     
     cart.forEach((item, index) => {
-        body += `${index + 1}. ${item.name}%0A`;
-        body += `   Quantité: ${item.quantity}%0A`;
-        body += `   Prix: ${item.price}$ x ${item.quantity} = ${(item.price * item.quantity).toFixed(2)}$%0A%0A`;
+        body += `${index + 1}. ${item.name}\n`;
+        body += `   Quantité: ${item.quantity}\n`;
+        body += `   Prix: ${item.price}$ x ${item.quantity} = ${(item.price * item.quantity).toFixed(2)}$\n\n`;
     });
     
     const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    body += `TOTAL: ${total.toFixed(2)}$%0A%0A`;
+    body += `TOTAL: ${total.toFixed(2)}$\n\n`;
     body += `Merci!`;
     
-    // Ouvrir le client email
-    const mailtoUrl = `mailto:${CONTACT_CONFIG.email}?subject=${subject}&body=${body}`;
+    const encodedSubject = encodeURIComponent(subject);
+    const encodedBody = encodeURIComponent(body);
+    const mailtoUrl = `mailto:${CONTACT_CONFIG.email}?subject=${encodedSubject}&body=${encodedBody}`;
     window.location.href = mailtoUrl;
     
     console.log('📧 Commande envoyée par email');
