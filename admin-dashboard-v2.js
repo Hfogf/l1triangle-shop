@@ -145,30 +145,60 @@ function showDashboard() {
                 
                 /* SIDEBAR COMPACTE - 20% de l'écran max */
                 .sidebar { 
-                    width: 180px; 
-                    min-width: 180px;
-                    max-width: 20%;
+                    width: 140px; 
+                    min-width: 140px;
+                    max-width: 15%;
                     background: linear-gradient(180deg, rgba(20, 25, 40, 0.98) 0%, rgba(15, 20, 35, 0.98) 100%); 
                     border-right: 1px solid rgba(255, 107, 61, 0.15); 
-                    padding: 18px 12px; 
+                    padding: 12px 8px; 
                     display: flex; 
                     flex-direction: column; 
-                    gap: 15px;
+                    gap: 10px;
                     overflow-y: auto;
                     transition: transform 0.3s ease;
                 }
                 
-                .sidebar h2 { font-size: 16px; color: #ff6b3d; margin-bottom: 4px; letter-spacing: 1px; }
-                .sidebar p { font-size: 10px !important; }
-                .sidebar-menu { display: flex; flex-direction: column; gap: 6px; flex: 1; }
-                .menu-item { padding: 10px 10px; background: rgba(255, 107, 61, 0.08); border: 1.5px solid rgba(255, 107, 61, 0.15); color: rgba(255, 177, 151, 0.85); border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 500; transition: all 0.25s; white-space: nowrap; text-align: center; }
+                .sidebar h2 { font-size: 14px; color: #ff6b3d; margin-bottom: 2px; letter-spacing: 0.5px; }
+                .sidebar p { font-size: 9px !important; opacity: 0.8; }
+                .sidebar-menu { display: flex; flex-direction: column; gap: 5px; flex: 1; }
+                .menu-item { 
+                    padding: 8px 6px; 
+                    background: rgba(255, 107, 61, 0.08); 
+                    border: 1.5px solid rgba(255, 107, 61, 0.15); 
+                    color: rgba(255, 177, 151, 0.85); 
+                    border-radius: 5px; 
+                    cursor: pointer; 
+                    font-size: 10px; 
+                    font-weight: 500; 
+                    transition: all 0.25s; 
+                    white-space: nowrap; 
+                    text-align: center;
+                    line-height: 1.3;
+                }
                 .menu-item:hover { background: rgba(255, 107, 61, 0.12); border-color: rgba(255, 107, 61, 0.35); color: #ffb197; }
                 .menu-item.active { background: linear-gradient(135deg, rgba(255, 107, 61, 0.25), rgba(255, 107, 61, 0.12)); border-color: #ff6b3d; color: #ff9966; box-shadow: inset 0 0 12px rgba(255, 107, 61, 0.15); }
-                .logout-btn { padding: 10px 10px; background: linear-gradient(135deg, rgba(255, 107, 61, 0.15), rgba(255, 107, 61, 0.08)); border: 1.5px solid rgba(255, 107, 61, 0.3); color: #ff9966; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 11px; transition: all 0.3s; text-align: center; }
+                .logout-btn { 
+                    padding: 8px 6px; 
+                    background: linear-gradient(135deg, rgba(255, 107, 61, 0.15), rgba(255, 107, 61, 0.08)); 
+                    border: 1.5px solid rgba(255, 107, 61, 0.3); 
+                    color: #ff9966; 
+                    border-radius: 5px; 
+                    cursor: pointer; 
+                    font-weight: 600; 
+                    font-size: 10px; 
+                    transition: all 0.3s; 
+                    text-align: center;
+                }
                 .logout-btn:hover { background: linear-gradient(135deg, #ff6b3d, rgba(255, 107, 61, 0.7)); border-color: #ff6b3d; color: #fff; }
                 
-                /* CONTENU PRINCIPAL - 80% de l'écran */
-                .main-content { flex: 1; width: 80%; overflow-y: auto; padding: 25px 30px; background: linear-gradient(135deg, rgba(5, 6, 8, 0.5) 0%, rgba(15, 25, 40, 0.5) 100%); }
+                /* CONTENU PRINCIPAL - 85% de l'écran */
+                .main-content { 
+                    flex: 1; 
+                    width: 85%; 
+                    overflow-y: auto; 
+                    padding: 20px 25px; 
+                    background: linear-gradient(135deg, rgba(5, 6, 8, 0.5) 0%, rgba(15, 25, 40, 0.5) 100%); 
+                }
                 .content-header h1 { font-size: 24px; color: #ff6b3d; margin-bottom: 8px; font-weight: 600; }
                 .content-header p { color: rgba(255, 177, 151, 0.65); font-size: 12px; }
                 .section { display: none; animation: fadeIn 0.3s ease-out; }
@@ -198,18 +228,23 @@ function showDashboard() {
                 
                 /* Smartphones Android/iPhone - Portrait */
                 @media(max-width: 480px) {
-                    .sidebar-toggle { display: block; }
+                    .sidebar-toggle { 
+                        display: block;
+                        position: fixed;
+                        top: 10px;
+                        left: 10px;
+                    }
                     
                     .sidebar {
                         position: fixed;
                         top: 0;
                         left: 0;
-                        width: 220px;
-                        max-width: 70%;
+                        width: 200px;
+                        max-width: 65%;
                         height: 100vh;
                         z-index: 1001;
                         transform: translateX(-100%);
-                        box-shadow: 4px 0 12px rgba(0,0,0,0.3);
+                        box-shadow: 4px 0 12px rgba(0,0,0,0.5);
                     }
                     
                     .sidebar.open {
@@ -221,30 +256,41 @@ function showDashboard() {
                     }
                     
                     .main-content {
-                        padding: 60px 12px 20px 12px;
-                        width: 100%;
+                        padding: 55px 10px 15px 10px !important;
+                        width: 100% !important;
+                        margin: 0 !important;
                     }
                     
-                    .content-header h1 { font-size: 20px; }
+                    .content-header h1 { font-size: 18px; margin-bottom: 15px; }
                     
                     .form-row {
-                        grid-template-columns: 1fr;
-                        gap: 12px;
+                        grid-template-columns: 1fr !important;
+                        gap: 10px;
                     }
                     
                     .section-card {
-                        padding: 15px;
+                        padding: 12px;
+                        margin-bottom: 15px;
                     }
                     
                     input, textarea, select {
-                        font-size: 16px; /* Évite zoom iPhone */
-                        padding: 12px;
+                        font-size: 16px !important; /* Évite zoom iPhone */
+                        padding: 11px !important;
                     }
                     
                     button {
                         width: 100%;
-                        padding: 12px;
-                        font-size: 14px;
+                        padding: 12px !important;
+                        font-size: 13px !important;
+                        margin-top: 5px;
+                    }
+                    
+                    label {
+                        font-size: 11px !important;
+                    }
+                    
+                    h2 {
+                        font-size: 15px !important;
                     }
                     
                     table {
@@ -257,7 +303,7 @@ function showDashboard() {
                     table th, table td {
                         padding: 6px 4px;
                         white-space: nowrap;
-                        font-size: 10px;
+                        font-size: 9px;
                     }
                 }
                 
@@ -297,24 +343,24 @@ function showDashboard() {
                 /* Tablettes iPad/Android - Portrait */
                 @media(min-width: 768px) and (max-width: 1024px) {
                     .sidebar {
-                        width: 160px;
-                        min-width: 160px;
-                        max-width: 18%;
-                        padding: 15px 10px;
+                        width: 130px;
+                        min-width: 130px;
+                        max-width: 15%;
+                        padding: 12px 8px;
                     }
                     
                     .sidebar h2 {
-                        font-size: 14px;
+                        font-size: 13px;
                     }
                     
                     .menu-item, .logout-btn {
-                        font-size: 10px;
-                        padding: 8px 8px;
+                        font-size: 9px;
+                        padding: 7px 5px;
                     }
                     
                     .main-content {
-                        padding: 20px;
-                        width: 82%;
+                        padding: 18px;
+                        width: 85%;
                     }
                     
                     .form-row {
@@ -325,13 +371,13 @@ function showDashboard() {
                 /* Tablettes - Paysage + Desktop small */
                 @media(min-width: 1025px) and (max-width: 1366px) {
                     .sidebar {
-                        width: 180px;
-                        min-width: 180px;
-                        max-width: 20%;
+                        width: 140px;
+                        min-width: 140px;
+                        max-width: 15%;
                     }
                     
                     .main-content {
-                        width: 80%;
+                        width: 85%;
                     }
                     
                     .form-row {
@@ -342,14 +388,14 @@ function showDashboard() {
                 /* Desktop large */
                 @media(min-width: 1367px) {
                     .sidebar {
-                        width: 200px;
-                        min-width: 200px;
-                        max-width: 18%;
+                        width: 160px;
+                        min-width: 160px;
+                        max-width: 15%;
                     }
                     
                     .main-content {
-                        width: 82%;
-                        padding: 30px 40px;
+                        width: 85%;
+                        padding: 25px 35px;
                     }
                     
                     .form-row {
