@@ -2,20 +2,34 @@
 
 class APIClient {
     constructor() {
-        // Toujours essayer localhost en premier
-        this.baseUrls = [
-            'http://localhost:3000/api',
-            'http://172.29.192.1:3000/api',
-            'http://10.115.107.126:3000/api'
-        ];
+        // Auto-détection: utiliser l'origine actuelle en premier
+        const currentOrigin = window.location.origin;
         
-        // Filtrer pour local dev seulement
-        if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-            console.log('🌐 Mode distant - essayer localhost en priorité');
+        // Si on est sur Render, utiliser uniquement l'URL de Render
+        if (currentOrigin.includes('onrender.com')) {
+            this.baseUrls = [`${currentOrigin}/api`];
+            console.log('🌐 Mode production Render:', this.baseUrls[0]);
+        } 
+        // Si localhost, essayer localhost uniquement
+        else if (currentOrigin.includes('localhost') || currentOrigin.includes('127.0.0.1')) {
+            this.baseUrls = [
+                'http://localhost:3000/api',
+                'http://127.0.0.1:3000/api'
+            ];
+            console.log('💻 Mode développement local');
+        }
+        // Sinon réseau local
+        else {
+            this.baseUrls = [
+                `${currentOrigin}/api`,
+                'http://172.29.192.1:3000/api',
+                'http://localhost:3000/api'
+            ];
+            console.log('📡 Mode réseau local');
         }
         
-        this.timeout = 15000;
-        this.retries = 5;
+        this.timeout = 10000;
+        this.retries = 2; // Moins de tentatives pour aller plus vite
         this.currentIndex = 0;
     }
 
