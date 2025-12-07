@@ -109,15 +109,61 @@ function showDashboard() {
             <style>
                 * { margin: 0; padding: 0; box-sizing: border-box; }
                 body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto; background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%); color: #e8e8e8; display: flex; min-height: 100vh; }
-                .admin-container { display: flex; width: 100%; height: 100vh; }
-                .sidebar { width: 260px; background: linear-gradient(180deg, rgba(20, 25, 40, 0.98) 0%, rgba(15, 20, 35, 0.98) 100%); border-right: 1px solid rgba(255, 107, 61, 0.15); padding: 25px 18px; display: flex; flex-direction: column; gap: 25px; }
+                
+                /* ============ LAYOUT RESPONSIVE ============ */
+                .admin-container { display: flex; width: 100%; min-height: 100vh; position: relative; }
+                
+                /* Bouton toggle mobile */
+                .sidebar-toggle { 
+                    display: none; 
+                    position: fixed; 
+                    top: 15px; 
+                    left: 15px; 
+                    z-index: 1002; 
+                    background: #ff6b3d; 
+                    border: none; 
+                    color: white; 
+                    width: 40px; 
+                    height: 40px; 
+                    border-radius: 8px; 
+                    cursor: pointer; 
+                    font-size: 20px;
+                    box-shadow: 0 4px 12px rgba(255,107,61,0.4);
+                }
+                
+                /* Overlay pour fermer sidebar sur mobile */
+                .sidebar-overlay {
+                    display: none;
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(0,0,0,0.6);
+                    z-index: 1000;
+                }
+                
+                .sidebar { 
+                    width: 260px; 
+                    min-width: 260px;
+                    background: linear-gradient(180deg, rgba(20, 25, 40, 0.98) 0%, rgba(15, 20, 35, 0.98) 100%); 
+                    border-right: 1px solid rgba(255, 107, 61, 0.15); 
+                    padding: 25px 18px; 
+                    display: flex; 
+                    flex-direction: column; 
+                    gap: 25px;
+                    overflow-y: auto;
+                    transition: transform 0.3s ease;
+                }
+                
                 .sidebar h2 { font-size: 22px; color: #ff6b3d; margin-bottom: 8px; letter-spacing: 1.5px; }
                 .sidebar-menu { display: flex; flex-direction: column; gap: 8px; flex: 1; }
-                .menu-item { padding: 11px 14px; background: rgba(255, 107, 61, 0.08); border: 1.5px solid rgba(255, 107, 61, 0.15); color: rgba(255, 177, 151, 0.85); border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.25s; }
+                .menu-item { padding: 11px 14px; background: rgba(255, 107, 61, 0.08); border: 1.5px solid rgba(255, 107, 61, 0.15); color: rgba(255, 177, 151, 0.85); border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.25s; white-space: nowrap; }
                 .menu-item:hover { background: rgba(255, 107, 61, 0.12); border-color: rgba(255, 107, 61, 0.35); color: #ffb197; }
                 .menu-item.active { background: linear-gradient(135deg, rgba(255, 107, 61, 0.25), rgba(255, 107, 61, 0.12)); border-color: #ff6b3d; color: #ff9966; box-shadow: inset 0 0 12px rgba(255, 107, 61, 0.15); }
                 .logout-btn { padding: 10px 14px; background: linear-gradient(135deg, rgba(255, 107, 61, 0.15), rgba(255, 107, 61, 0.08)); border: 1.5px solid rgba(255, 107, 61, 0.3); color: #ff9966; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.3s; }
                 .logout-btn:hover { background: linear-gradient(135deg, #ff6b3d, rgba(255, 107, 61, 0.7)); border-color: #ff6b3d; color: #fff; }
+                
                 .main-content { flex: 1; overflow-y: auto; padding: 35px 40px; background: linear-gradient(135deg, rgba(5, 6, 8, 0.5) 0%, rgba(15, 25, 40, 0.5) 100%); }
                 .content-header h1 { font-size: 28px; color: #ff6b3d; margin-bottom: 8px; font-weight: 600; }
                 .content-header p { color: rgba(255, 177, 151, 0.65); font-size: 13px; }
@@ -137,25 +183,109 @@ function showDashboard() {
                 button { padding: 10px 20px; background: linear-gradient(135deg, #ff6b3d, rgba(255, 107, 61, 0.8)); border: none; color: #fff; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.3s; font-size: 13px; }
                 button:hover { transform: translateY(-2px); }
                 .btn-danger { background: linear-gradient(135deg, rgba(255, 50, 50, 0.7), rgba(255, 100, 100, 0.5)); }
-                table { width: 100%; border-collapse: collapse; }
+                table { width: 100%; border-collapse: collapse; margin-top: 15px; }
                 table th { background: rgba(255, 107, 61, 0.1); padding: 12px 14px; color: #ff9966; font-weight: 600; border-bottom: 1.5px solid rgba(255, 107, 61, 0.15); font-size: 12px; }
                 table td { padding: 11px 14px; border-bottom: 1px solid rgba(255, 107, 61, 0.08); color: rgba(232, 232, 232, 0.9); font-size: 13px; }
                 table tr:hover { background: rgba(255, 107, 61, 0.06); }
                 .product-item { background: linear-gradient(135deg, rgba(255, 107, 61, 0.1), rgba(255, 107, 61, 0.05)); padding: 14px; margin-bottom: 12px; border-radius: 8px; border-left: 3px solid #ff6b3d; border: 1px solid rgba(255, 107, 61, 0.15); }
                 .loading { color: #ff6b3d; font-weight: 600; font-size: 13px; }
+                
+                /* ============ RESPONSIVE MOBILE ============ */
+                @media(max-width: 768px) {
+                    .sidebar-toggle { display: block; }
+                    
+                    .sidebar {
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        height: 100vh;
+                        z-index: 1001;
+                        transform: translateX(-100%);
+                        box-shadow: 4px 0 12px rgba(0,0,0,0.3);
+                    }
+                    
+                    .sidebar.open {
+                        transform: translateX(0);
+                    }
+                    
+                    .sidebar-overlay.show {
+                        display: block;
+                    }
+                    
+                    .main-content {
+                        padding: 70px 15px 20px 15px;
+                        width: 100%;
+                    }
+                    
+                    .content-header h1 { font-size: 22px; }
+                    
+                    .form-row {
+                        grid-template-columns: 1fr;
+                        gap: 12px;
+                    }
+                    
+                    .section-card {
+                        padding: 18px;
+                    }
+                    
+                    input, textarea, select {
+                        font-size: 16px; /* Évite zoom iPhone */
+                        padding: 12px;
+                    }
+                    
+                    button {
+                        width: 100%;
+                        padding: 12px;
+                        font-size: 14px;
+                    }
+                    
+                    table {
+                        font-size: 11px;
+                        display: block;
+                        overflow-x: auto;
+                        -webkit-overflow-scrolling: touch;
+                    }
+                    
+                    table th, table td {
+                        padding: 8px 6px;
+                        white-space: nowrap;
+                    }
+                }
+                
+                /* Tablettes */
+                @media(min-width: 769px) and (max-width: 1024px) {
+                    .sidebar {
+                        width: 200px;
+                        min-width: 200px;
+                    }
+                    
+                    .main-content {
+                        padding: 25px;
+                    }
+                    
+                    .form-row {
+                        grid-template-columns: 1fr;
+                    }
+                }
             </style>
             
+            <!-- Bouton toggle sidebar mobile -->
+            <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+            
+            <!-- Overlay pour fermer sidebar -->
+            <div class="sidebar-overlay" onclick="closeSidebar()"></div>
+            
             <div class="admin-container">
-                <aside class="sidebar">
+                <aside class="sidebar" id="sidebar">
                     <div>
                         <h2>▲ L1 TRIANGLE</h2>
                         <p style="font-size: 12px; color: rgba(255, 177, 151, 0.7);">Admin Dashboard</p>
                     </div>
                     
                     <nav class="sidebar-menu">
-                        <button class="menu-item active" data-tab="products">🛍️ PRODUITS</button>
-                        <button class="menu-item" data-tab="orders">📦 COMMANDES</button>
-                        <button class="menu-item" data-tab="logs">📋 LOGS</button>
+                        <button class="menu-item active" data-tab="products" onclick="closeSidebar()">🛍️ PRODUITS</button>
+                        <button class="menu-item" data-tab="orders" onclick="closeSidebar()">📦 COMMANDES</button>
+                        <button class="menu-item" data-tab="logs" onclick="closeSidebar()">📋 LOGS</button>
                     </nav>
                     
                     <button class="logout-btn" onclick="logout()">🚪 DÉCONNEXION</button>
@@ -367,6 +497,24 @@ async function loadLogsAdmin() {
     } catch (error) {
         el.innerHTML = `<div class="section-card" style="color: red;">❌ ${error.message}</div>`;
     }
+}
+
+// ==================== SIDEBAR MOBILE ====================
+
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.querySelector('.sidebar-overlay');
+    
+    sidebar.classList.toggle('open');
+    overlay.classList.toggle('show');
+}
+
+function closeSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.querySelector('.sidebar-overlay');
+    
+    sidebar.classList.remove('open');
+    overlay.classList.remove('show');
 }
 
 // ==================== INIT ====================
