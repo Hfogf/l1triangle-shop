@@ -398,12 +398,63 @@ body{
     margin-bottom: 8px;
 }
 
-.social-links{
+/* CONTACT ICONS */
+.contact-icons {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
+    gap: 15px;
+    margin-top: 10px;
 }
 
+.contact-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 107, 61, 0.1);
+    border: 1px solid rgba(255, 107, 61, 0.2);
+    color: #ff6b3d;
+    transition: all 0.3s;
+    text-decoration: none;
+}
+
+.contact-icon:hover {
+    background: rgba(255, 107, 61, 0.2);
+    border-color: #ff6b3d;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(255, 107, 61, 0.3);
+}
+
+/* SOCIAL ICONS */
+.social-links{
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.social-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(255, 107, 61, 0.08);
+    border: 1px solid rgba(255, 107, 61, 0.15);
+    color: #ff6b3d;
+    transition: all 0.3s;
+    text-decoration: none;
+}
+
+.social-icon:hover {
+    background: #ff6b3d;
+    color: #fff;
+    transform: translateY(-3px) rotate(5deg);
+    box-shadow: 0 5px 15px rgba(255, 107, 61, 0.4);
+}
+
+/* LEGACY SOCIAL LINK - Keep for compatibility */
 .social-link{
     color: #f5f5f5;
     text-decoration: none;
@@ -427,34 +478,25 @@ body{
     opacity: 0.7;
 }
 
-/* ADMIN ICON */
+/* ADMIN LINK DISCRET DANS NAV */
 
-.admin-icon{
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 40px;
-    height: 40px;
-    background: rgba(255,107,61,0.15);
-    border: 1px solid rgba(255,107,61,0.3);
-    border-radius: 50%;
-    display: flex;
+.admin-link-discrete {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: #ff6b3d;
-    opacity: 0.4;
-    transition: all 0.3s ease;
-    z-index: 999;
-    backdrop-filter: blur(10px);
-    text-decoration: none;
+    opacity: 0.3;
+    transition: all 0.2s ease;
+    padding: 4px;
+    border-radius: 4px;
 }
 
-.admin-icon:hover{
+.admin-link-discrete:hover {
     opacity: 1;
-    background: rgba(255,107,61,0.25);
-    border-color: #ff6b3d;
-    transform: scale(1.1) rotate(5deg);
-    box-shadow: 0 8px 20px rgba(255,107,61,0.3);
+    background: rgba(255,107,61,0.1);
+}
+
+.admin-link-discrete svg {
+    stroke: #ff6b3d;
 }
 
 /* ==================== RESPONSIVE MOBILE/TABLETTE ==================== */
