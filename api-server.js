@@ -45,6 +45,14 @@ function readDatabase() {
     return { products: [], orders: [], logs: [] };
 }
 
+function cleanNonAdminProducts(data) {
+    // Garder SEULEMENT les produits ajoutés par l'admin
+    if (data.products && Array.isArray(data.products)) {
+        data.products = data.products.filter(p => p.addedByAdmin === true);
+    }
+    return data;
+}
+
 function writeDatabase(data) {
     try {
         fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
@@ -128,11 +136,12 @@ app.post('/api/products', verifyAuth, (req, res) => {
         const newProduct = {
             id: uuidv4(),
             ...req.body,
-            createdAt: new Date().toISOString()
+            createdAt: new Date().toISOString(),
+            addedByAdmin: true  // 🔑 CRUCIAL: Marquer comme produit admin
         };
         db.products.push(newProduct);
         if (!writeDatabase(db)) throw new Error('Save failed');
-        console.log(`✅ Product added: ${newProduct.name}`);
+        console.log(`✅ Product added by admin: ${newProduct.name}`);
         res.status(201).json(newProduct);
     } catch (error) {
         console.error('❌ Error:', error);
@@ -238,6 +247,19 @@ console.log('\n🔄 Initializing...');
 console.log(`📱 Starting on port ${PORT}...\n`);
 
 const server = app.listen(PORT, '0.0.0.0', () => {
+    // 🔑 NETTOYAGE AU DÉMARRAGE: Supprimer les produits non-admin
+    let db = readDatabase();
+    const initialCount = db.products ? db.products.length : 0;
+    
+    db = cleanNonAdminProducts(db);
+    const finalCount = db.products ? db.products.length : 0;
+    
+    if (initialCount > finalCount) {
+        writeDatabase(db);
+        console.log(`🧹 ${initialCount - finalCount} produits non-admin supprimés`);
+        console.log(`✅ ${finalCount} produits admin conservés\n`);
+    }
+    
     const localIP = Object.values(os.networkInterfaces())
         .flat()
         .filter(iface => iface.family === 'IPv4' && !iface.internal)[0]?.address || 'localhost';

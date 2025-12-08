@@ -11,50 +11,50 @@ const demoProducts = [
     {
         name: "Manette Sans Fil Pro",
         category: "manettes",
-        price: 65.00,
+        price: 5000.00,
         stock: 15,
         description: "Manette ergonomique sans fil avec batterie longue durée. Compatible PC, PS4, PS5.",
-        image: "https://via.placeholder.com/300x200?text=Manette+Pro"
+        image: "WhatsApp Image 2025-11-21 at 08.23.36_385ddb4c.jpg"
     },
     {
-        name: "Moniteur Gaming 144Hz",
+        name: "Moniteur Gaming 180Hz",
         category: "moniteurs",
-        price: 250.00,
+        price: 33250.00,
         stock: 8,
-        description: "Écran 24 pouces, 144Hz, 1ms, design borderless. Parfait pour le gaming compétitif.",
-        image: "https://via.placeholder.com/300x200?text=Moniteur+144Hz"
+        description: "Écran 24 pouces, 180Hz, 1ms, design borderless. Parfait pour le gaming compétitif.",
+        image: "WhatsApp Image 2025-11-21 at 08.23.57_d33eb1a7.jpg"
     },
     {
         name: "Casque Gaming RGB",
         category: "accessoires",
-        price: 45.00,
+        price: 1000.00,
         stock: 20,
         description: "Casque avec son surround 7.1, micro antibruit et éclairage RGB personnalisable.",
         image: "https://via.placeholder.com/300x200?text=Casque+RGB"
     },
     {
-        name: "AirPods Pro",
+        name: "AirPods Pro 3",
         category: "airpods",
-        price: 85.00,
+        price: 10500.00,
         stock: 12,
-        description: "Écouteurs sans fil avec réduction active du bruit (ANC) et excellente autonomie.",
-        image: "https://via.placeholder.com/300x200?text=AirPods+Pro"
+        description: "Les AirPods Pro 3 offrent une qualité audio améliorée avec réduction active du bruit, mode transparence, suivi de fréquence cardiaque, certification IP57, et une autonomie portée jusqu’à 10 heures Frandroid +2.",
+        image: "WhatsApp Image 2025-11-21 at 08.26.41_2fa4b617.jpg"
     },
     {
         name: "Câble USB-C Rapide",
         category: "cables",
-        price: 12.00,
+        price: 750.00,
         stock: 50,
         description: "Câble de charge rapide 3A, résistant, longueur 2m. Compatible tous appareils USB-C.",
         image: "https://via.placeholder.com/300x200?text=Cable+USB-C"
     },
     {
-        name: "Vape Kit Premium",
+        name: "AIVONO Magic peach ice ",
         category: "vape",
-        price: 35.00,
+        price: 2500.00,
         stock: 25,
-        description: "Kit vape 5000 puffs, recharge rapide, multiple saveurs disponibles.",
-        image: "https://via.placeholder.com/300x200?text=Vape+Kit"
+        description: " 🔋 Rechargeable Type-c , 🧪 26ml likid , LED intelligent🔞 18+ sèlman.",
+        image: "WhatsApp Image 2025-12-08 at 17.24.41_2f6acae2.jpg"
     }
 ];
 
@@ -69,7 +69,8 @@ async function addDemoProducts() {
             db.products.push({
                 id: uuidv4(),
                 ...product,
-                createdAt: new Date().toISOString()
+                createdAt: new Date().toISOString(),
+                addedByAdmin: true  // 🔑 Marquer comme produit admin pour persistance
             });
         });
 
