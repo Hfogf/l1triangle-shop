@@ -490,7 +490,7 @@ async function loadProductsAdmin() {
                         <div class="form-group"><label>Catégorie *</label><select name="category" required><option>manettes</option><option>accessoires</option><option>moniteurs</option></select></div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group"><label>Prix ($) *</label><input type="number" name="price" step="0.01" required></div>
+                        <div class="form-group"><label>Prix (HTG) *</label><input type="number" name="price" step="0.01" required></div>
                         <div class="form-group"><label>Stock *</label><input type="number" name="stock" required></div>
                     </div>
                     <div class="form-group"><label>Description</label><textarea name="description"></textarea></div>
@@ -503,7 +503,7 @@ async function loadProductsAdmin() {
                 ${(products || []).map(p => `
                     <div class="product-item">
                         <h4>${p.name}</h4>
-                        <p style="margin: 5px 0; color: rgba(255, 177, 151, 0.8); font-size: 12px;">Cat: ${p.category} | Prix: $${p.price} | Stock: ${p.stock}</p>
+                        <p style="margin: 5px 0; color: rgba(255, 177, 151, 0.8); font-size: 12px;">Cat: ${p.category} | Prix: ${p.price} HTG | Stock: ${p.stock}</p>
                         <button class="btn-danger" onclick="handleDeleteProduct('${p.id}')" style="margin-top: 10px;">SUPPRIMER</button>
                     </div>
                 `).join('')}

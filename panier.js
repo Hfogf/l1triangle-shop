@@ -64,7 +64,7 @@ function renderCart() {
             <img src="${item.image}" class="cart-item-img" alt="">
             <div class="cart-item-info">
                 <h4>${item.name}</h4>
-                <span>Prix unité: ${item.price.toFixed(2)} $</span>
+                <span>Prix unité: ${item.price.toFixed(2)} HTG</span>
             </div>
             <div class="cart-item-controls">
                 <div class="qty-controls">
@@ -72,7 +72,7 @@ function renderCart() {
                     <span class="cart-item-qty">${item.qty}</span>
                     <button class="qty-btn plus">+</button>
                 </div>
-                <div>${sub.toFixed(2)} $</div>
+                <div>${sub.toFixed(2)} HTG</div>
                 <button class="remove-item">Supprimer</button>
             </div>
         `;
@@ -112,13 +112,13 @@ function buildOrderText() {
 
     cart.forEach(item => {
         lines.push(
-            `- ${item.name} x${item.qty} : ${item.price.toFixed(2)} $ ` +
-            `(sous-total ${(item.price * item.qty).toFixed(2)} $)`
+            `- ${item.name} x${item.qty} : ${item.price.toFixed(2)} HTG ` +
+            `(sous-total ${(item.price * item.qty).toFixed(2)} HTG)`
         );
     });
 
     lines.push('');
-    lines.push(`Total : ${total.toFixed(2)} $`);
+    lines.push(`Total : ${total.toFixed(2)} HTG`);
 
     return lines.join('\n');
 }

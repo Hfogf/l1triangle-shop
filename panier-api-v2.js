@@ -216,7 +216,7 @@ function renderProducts(products) {
                      onerror="this.src='https://via.placeholder.com/300x200?text=Image'">
                 <h3>${p.name}</h3>
                 <p>${p.description || 'Aucune description'}</p>
-                <div class="price">${parseFloat(p.price).toFixed(2)} $</div>
+                <div class="price">${parseFloat(p.price).toFixed(2)} HTG</div>
                 <small style="opacity:.7;">Stock: ${p.stock || 'N/A'}</small>
                 <button class="product-btn add-to-cart">Ajouter au panier</button>
             </article>
@@ -335,13 +335,13 @@ async function submitOrder(method) {
     try {
         await window.apiClient.post('/orders', order);
         console.log('✅ Commande sauvegardée');
-        alert(`✅ Commande enregistrée!\nTotal: $ ${order.total.toFixed(2)}`);
+        alert(`✅ Commande enregistrée!\nTotal: ${order.total.toFixed(2)} HTG`);
         cart.length = 0;
         localStorage.setItem('cart', JSON.stringify(cart));
         updateCart();
     } catch (error) {
         console.error('⚠️ Commande non sauvegardée (hors ligne):', error);
-        alert(`⚠️ Commande créée mais non sauvegardée\nTotal: $ ${order.total.toFixed(2)}`);
+        alert(`⚠️ Commande créée mais non sauvegardée\nTotal: ${order.total.toFixed(2)} HTG`);
     }
 }
 
@@ -475,7 +475,7 @@ function updateCart() {
             <img src="${item.image || 'https://via.placeholder.com/60'}" class="cart-item-img" alt="${item.name}">
             <div class="cart-item-info">
                 <h4>${item.name}</h4>
-                <span>$ ${item.price.toFixed(2)}</span>
+                <span>HTG ${item.price.toFixed(2)}</span>
             </div>
             <div class="qty-controls">
                 <button class="qty-btn minus" data-id="${item.id}">-</button>
@@ -545,12 +545,12 @@ function sendToWhatsApp() {
         const subtotal = (item.price * item.quantity).toFixed(2);
         rawMessage += `${index + 1}. *${item.name}*\n`;
         rawMessage += `   Quantité: ${item.quantity}\n`;
-        rawMessage += `   Prix: ${item.price}$ x ${item.quantity}\n`;
-        rawMessage += `   Sous-total: ${subtotal}$\n\n`;
+        rawMessage += `   Prix: ${item.price} HTG x ${item.quantity}\n`;
+        rawMessage += `   Sous-total: ${subtotal} HTG\n\n`;
     });
     
     const total = currentCart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2);
-    rawMessage += `💰 *TOTAL: ${total}$*\n\n`;
+    rawMessage += `💰 *TOTAL: ${total} HTG*\n\n`;
     rawMessage += `📱 Merci de votre commande!\n`;
     rawMessage += `Contact: ${CONTACT_CONFIG.shopName}`;
     
@@ -590,12 +590,12 @@ function sendToEmail() {
         const subtotal = (item.price * item.quantity).toFixed(2);
         body += `${index + 1}. ${item.name}\n`;
         body += `   Quantité: ${item.quantity}\n`;
-        body += `   Prix: ${item.price}$ x ${item.quantity} = ${subtotal}$\n\n`;
+        body += `   Prix: ${item.price} HTG x ${item.quantity} = ${subtotal} HTG\n\n`;
     });
     
     const total = currentCart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2);
     body += `\n━━━━━━━━━━━━━━━━━━━\n`;
-    body += `TOTAL: ${total}$\n`;
+    body += `TOTAL: ${total} HTG\n`;
     body += `━━━━━━━━━━━━━━━━━━━\n\n`;
     body += `Merci!\n\n`;
     body += `---\n`;
