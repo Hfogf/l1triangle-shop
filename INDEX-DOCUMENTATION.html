@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📚 Documentation L1 TRIANGLE - Index</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #4caf50;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+        
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+        
+        .card p {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .card-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .card-links {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .card-link {
+            display: inline-block;
+            color: #667eea;
+            text-decoration: none;
+            padding: 8px 12px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+        
+        .card-link:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .section-title {
+            color: white;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            margin-top: 40px;
+        }
+        
+        .quick-start {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+        
+        .quick-start h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        
+        .quick-start ol {
+            margin-left: 20px;
+            line-height: 2;
+            color: #666;
+        }
+        
+        .quick-start code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+        
+        .footer {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            color: #666;
+            margin-top: 40px;
+        }
+        
+        .status {
+            display: inline-block;
+            background: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 L1 TRIANGLE DOCUMENTATION</h1>
+            <p>Système e-commerce avec persistance complète des données</p>
+            <div class="badge">✅ PRODUCTION READY</div>
+        </div>
+        
+        <div class="quick-start">
+            <h2>🚀 Démarrage Rapide</h2>
+            <ol>
+                <li>Lancer le serveur: <code>node api-server.js</code></li>
+                <li>Accéder au shop: <code>http://localhost:3000/</code></li>
+                <li>Admin login: <code>http://localhost:3000/admin-login-v2.html</code></li>
+                <li>Voir historique: <code>http://localhost:3000/admin-orders.html</code></li>
+            </ol>
+            <div style="margin-top: 20px; padding: 15px; background: #e8f5e9; border-radius: 4px; color: #2e7d32;">
+                <strong>✨ Code admin:</strong> L1_TRIANGLE
+            </div>
+        </div>
+        
+        <div class="section-title">📖 DOCUMENTATION</div>
+        
+        <div class="grid">
+            <div class="card">
+                <div class="card-icon">📝</div>
+                <h2>SOLUTION-RESUME.txt</h2>
+                <p>Résumé complet du problème résolu et des solutions apportées. Parfait pour comprendre ce qui a changé.</p>
+                <div class="card-links">
+                    <a href="SOLUTION-RESUME.txt" class="card-link" target="_blank">📥 Voir le document</a>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">📖</div>
+                <h2>PERSISTENCE-GUIDE.md</h2>
+                <p>Guide détaillé complet avec tous les détails sur la persistance, tests, et dépannage.</p>
+                <div class="card-links">
+                    <a href="PERSISTENCE-GUIDE.md" class="card-link" target="_blank">📥 Lire le guide</a>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">⚙️</div>
+                <h2>MODIFICATIONS-RESUME.md</h2>
+                <p>Détail technique de tous les fichiers modifiés et créés. Pour les développeurs.</p>
+                <div class="card-links">
+                    <a href="MODIFICATIONS-RESUME.md" class="card-link" target="_blank">📥 Voir les changements</a>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">🔌</div>
+                <h2>API-ENDPOINTS.md</h2>
+                <p>Documentation complète de toutes les routes API avec exemples et réponses.</p>
+                <div class="card-links">
+                    <a href="API-ENDPOINTS.md" class="card-link" target="_blank">📥 Consulter les endpoints</a>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">✅</div>
+                <h2>CHECKLIST-PREDEPLOIEMENT.md</h2>
+                <p>Checklist complète de vérification avant mise en production. À remplir.</p>
+                <div class="card-links">
+                    <a href="CHECKLIST-PREDEPLOIEMENT.md" class="card-link" target="_blank">📥 Voir la checklist</a>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">🧪</div>
+                <h2>test-persistence.js</h2>
+                <p>Script de test pour vérifier l'état de la base de données.</p>
+                <div class="card-links">
+                    <span style="color: #999;">$ node test-persistence.js</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section-title">🎨 INTERFACES</div>
+        
+        <div class="grid">
+            <div class="card">
+                <div class="card-icon">🛒</div>
+                <h2>Shop Client</h2>
+                <p>Interface de vente - Clients ajoutent au panier et passent commandes.</p>
+                <div class="card-links">
+                    <a href="/" class="card-link" target="_blank">🌐 Ouvrir le shop</a>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">🔐</div>
+                <h2>Admin Login</h2>
+                <p>Authentification admin pour gérer les produits.</p>
+                <div class="card-links">
+                    <a href="/admin-login-v2.html" class="card-link" target="_blank">🔒 Aller au login</a>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">📊</div>
+                <h2>Admin Dashboard</h2>
+                <p>Gestion complète des produits, création et suppression.</p>
+                <div class="card-links">
+                    <a href="/admin-dashboard-v2.html" class="card-link" target="_blank">⚙️ Admin panel</a>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">📈</div>
+                <h2>Historique & Logs</h2>
+                <p>Voir toutes les commandes, logs de connexion et statistiques.</p>
+                <div class="card-links">
+                    <a href="/admin-orders.html" class="card-link" target="_blank">📋 Ouvrir l'historique</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="quick-start">
+            <h2>🧪 Test de Persistance</h2>
+            <p>Pour vérifier que les données persistent après redémarrage:</p>
+            <ol>
+                <li>Ajouter un produit en admin</li>
+                <li>Arrêter le serveur (Ctrl+C)</li>
+                <li>Redémarrer: <code>node api-server.js</code></li>
+                <li>✅ Vérifier que le produit est toujours là!</li>
+            </ol>
+        </div>
+        
+        <div class="footer">
+            <p><strong>Mise à jour:</strong> 8 Décembre 2025</p>
+            <p><strong>Version:</strong> 1.0 - PRODUCTION READY</p>
+            <p><strong>Système:</strong> Persistance complète avec database.json ✅</p>
+        </div>
+    </div>
+</body>
+</html>

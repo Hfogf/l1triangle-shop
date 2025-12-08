@@ -202,6 +202,29 @@ app.get('/api/logs', (req, res) => {
     }
 });
 
+// Log une connexion utilisateur
+app.post('/api/logs/connection', (req, res) => {
+    try {
+        const db = readDatabase();
+        if (!db.logs) db.logs = [];
+        const logEntry = {
+            id: uuidv4(),
+            type: 'connection',
+            timestamp: new Date().toISOString(),
+            userAgent: req.body.userAgent || req.headers['user-agent'],
+            ip: req.ip || req.connection.remoteAddress,
+            ...req.body
+        };
+        db.logs.push(logEntry);
+        if (!writeDatabase(db)) throw new Error('Save failed');
+        console.log('📋 Connexion enregistrée:', logEntry.timestamp);
+        res.json({ success: true });
+    } catch (error) {
+        console.error('❌ Error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // ==================== ERROR HANDLER ====================
 
 app.use((err, req, res, next) => {

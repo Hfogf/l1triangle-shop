@@ -320,28 +320,36 @@ async function submitOrder(method) {
 
     const name = prompt('Votre nom:');
     if (!name) return;
+    
+    const phone = prompt('Votre numéro de téléphone:') || 'Non fourni';
+    const email = prompt('Votre email:') || 'Non fourni';
 
     const order = {
         id: Date.now().toString(),
         customerName: name,
+        customerPhone: phone,
+        customerEmail: email,
         items: cart,
-        total: cart.reduce((sum, item) => sum + (item.price * item.qty), 0),
+        total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
         date: new Date().toISOString(),
-        method: method
+        method: method,
+        ipAddress: 'Client',
+        userAgent: navigator.userAgent
     };
 
     console.log('📝 Nouvelle commande:', order);
 
     try {
         await window.apiClient.post('/orders', order);
-        console.log('✅ Commande sauvegardée');
-        alert(`✅ Commande enregistrée!\nTotal: ${order.total.toFixed(2)} HTG`);
+        console.log('✅ Commande sauvegardée dans la base de données');
+        alert(`✅ Commande enregistrée avec succès!\n\nRéférences: ${order.id}\nTotal: ${order.total.toFixed(2)} HTG\n\nVous serez contacté bientôt.`);
         cart.length = 0;
         localStorage.setItem('cart', JSON.stringify(cart));
         updateCart();
+        if (cartOverlay) cartOverlay.classList.add('hidden');
     } catch (error) {
-        console.error('⚠️ Commande non sauvegardée (hors ligne):', error);
-        alert(`⚠️ Commande créée mais non sauvegardée\nTotal: ${order.total.toFixed(2)} HTG`);
+        console.error('⚠️ Erreur lors de la sauvegarde:', error);
+        alert(`⚠️ Commande reçue mais erreur sauvegarde\nTotal: ${order.total.toFixed(2)} HTG\n\nVérifiez votre connexion internet.`);
     }
 }
 
@@ -399,6 +407,18 @@ function formatPhoneNumber(raw) {
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('🎯 Page chargée, initialisation');
+    
+    // Enregistrer la connexion
+    try {
+        window.apiClient.post('/logs/connection', {
+            userAgent: navigator.userAgent,
+            timestamp: new Date().toISOString(),
+            page: window.location.href
+        }).catch(err => console.warn('Connection logging failed:', err));
+    } catch (err) {
+        console.warn('Connection logging not available');
+    }
+    
     loadProducts();
     
     // Gérer l'ouverture/fermeture du panier
