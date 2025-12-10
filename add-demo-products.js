@@ -25,12 +25,7 @@ const demoProducts = [
         image: "WhatsApp Image 2025-11-21 at 08.23.57_d33eb1a7.jpg"
     },
     {
-        name: "Casque Gaming RGB",
-        category: "accessoires",
-        price: 1000.00,
-        stock: 20,
-        description: "Casque avec son surround 7.1, micro antibruit et éclairage RGB personnalisable.",
-        image: "https://via.placeholder.com/300x200?text=Casque+RGB"
+        
     },
     {
         name: "AirPods Pro 3",
@@ -41,13 +36,10 @@ const demoProducts = [
         image: "WhatsApp Image 2025-11-21 at 08.26.41_2fa4b617.jpg"
     },
     {
-        name: "Câble USB-C Rapide",
-        category: "cables",
-        price: 750.00,
-        stock: 50,
-        description: "Câble de charge rapide 3A, résistant, longueur 2m. Compatible tous appareils USB-C.",
-        image: "https://via.placeholder.com/300x200?text=Cable+USB-C"
-    },
+
+        
+    }
+
     {
         name: "AIVONO Magic peach ice ",
         category: "vape",
