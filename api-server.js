@@ -46,10 +46,10 @@ function readDatabase() {
 }
 
 function cleanNonAdminProducts(data) {
-    // Garder SEULEMENT les produits ajoutés par l'admin
-    if (data.products && Array.isArray(data.products)) {
-        data.products = data.products.filter(p => p.addedByAdmin === true);
-    }
+    // ✅ AUCUN NETTOYAGE - Conserver TOUS les produits tels quels
+    // Les produits ne sont JAMAIS supprimés, même s'ils ne sont pas admin
+    // Cette fonction ne fait rien volontairement
+    console.log('✅ Aucun produit supprimé - tous les produits conservés');
     return data;
 }
 

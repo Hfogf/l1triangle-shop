@@ -1,3 +1,16 @@
+// ==================== PRODUITS PAR DÉFAUT ====================
+// Ces produits s'affichent immédiatement en cas de lenteur API
+const DEFAULT_PRODUCTS = [
+    { id: 'admin1', name: '🟢 PRODUIT ADMIN 1', category: 'manettes', price: 100, description: 'Produit test admin', image: '🎮', addedByAdmin: true },
+    { id: 'admin2', name: '🟢 PRODUIT ADMIN 2', category: 'manettes', price: 200, description: 'Produit test admin 2', image: '🎮', addedByAdmin: true },
+    { id: 'prod1', name: 'Manette Sans Fil Pro', category: 'manettes', price: 5000, description: 'Manette gaming sans fil', image: '🎮', addedByAdmin: true },
+    { id: 'prod2', name: 'Moniteur Gaming 180Hz', category: 'moniteurs', price: 33250, description: 'Écran haute performance', image: '📺', addedByAdmin: true },
+    { id: 'prod3', name: 'Casque Gaming RGB', category: 'accessoires', price: 1000, description: 'Casque gaming avec LED', image: '🎧', addedByAdmin: true },
+    { id: 'prod4', name: 'AirPods Pro 3', category: 'airpods', price: 10500, description: 'Écouteurs premium', image: '🎧', addedByAdmin: true },
+    { id: 'prod5', name: 'Câble USB-C Rapide', category: 'cables', price: 750, description: 'Câble de chargement rapide', image: '🔌', addedByAdmin: true },
+    { id: 'prod6', name: 'AIVONO Magic peach ice', category: 'vape', price: 2500, description: 'Vape saveur pêche', image: '💨', addedByAdmin: true }
+];
+
 // ==================== CONFIGURATION API ROBUSTE ====================
 
 class APIClient {
@@ -140,28 +153,45 @@ window.apiClient = new APIClient();
 async function loadProducts() {
     try {
         console.log('🚀 Démarrage du chargement des produits');
-        const products = await window.apiClient.get('/products');
         
-        if (!Array.isArray(products)) {
-            console.warn('⚠️ Pas un array, reçu:', products);
-            throw new Error('Format invalide: expected array');
+        // Afficher les produits par défaut IMMÉDIATEMENT
+        console.log('📦 Affichage des produits par défaut...');
+        renderProducts(DEFAULT_PRODUCTS);
+        
+        // Essayer de charger depuis l'API en parallèle (max 5 sec)
+        let timeoutReached = false;
+        const timeoutPromise = new Promise((resolve) => {
+            setTimeout(() => {
+                timeoutReached = true;
+                console.log('⏱️ Timeout 5s - produits par défaut conservés');
+                resolve(null);
+            }, 5000);
+        });
+        
+        try {
+            const productsPromise = window.apiClient.get('/products');
+            const products = await Promise.race([productsPromise, timeoutPromise]);
+            
+            if (products && Array.isArray(products) && products.length > 0) {
+                console.log(`✅ ${products.length} produits reçus de l'API`);
+                renderProducts(products);
+                return products;
+            }
+        } catch (apiError) {
+            console.warn('⚠️ API indisponible, garde produits par défaut:', apiError.message);
         }
-
-        console.log(`📊 ${products.length} produits reçus`);
-        console.table(products);
-        renderProducts(products);
-        return products;
+        
+        // Si pas de réponse API, utiliser les produits par défaut
+        console.log('📦 Utilisation des produits par défaut');
+        return DEFAULT_PRODUCTS;
 
     } catch (error) {
-        console.error('💥 ERREUR CRITIQUE:', error);
-        showError(`Impossible de charger les produits: ${error.message}`);
+        console.error('💥 ERREUR:', error);
+        showError(`Chargement des produits: ${error.message}`);
         
-        // Afficher un message d'erreur sur la page
-        const sections = document.querySelectorAll('.product-section .product-grid');
-        sections.forEach(grid => {
-            grid.innerHTML = `<p style="color: #ff6b3d; text-align: center; padding: 20px;">⚠️ ${error.message}</p>`;
-        });
-        return [];
+        // Afficher un message + les produits par défaut
+        renderProducts(DEFAULT_PRODUCTS);
+        return DEFAULT_PRODUCTS;
     }
 }
 

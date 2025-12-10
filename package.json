@@ -4,8 +4,9 @@
   "description": "API pour L1triangle_store - Gestion des produits et commandes",
   "main": "api-server.js",
   "scripts": {
-    "start": "node api-server.js",
-    "dev": "nodemon api-server.js"
+    "start": "node render-server.js",
+    "dev": "node api-server.js",
+    "render": "node start.js"
   },
   "keywords": [
     "api",
