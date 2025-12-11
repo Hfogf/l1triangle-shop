@@ -328,14 +328,17 @@
     </div>
 
     <script>
-        // Configuration API - Auto-détection
+        // Configuration API - Auto-détection (GitHub Pages → Render API)
         const currentOrigin = window.location.origin;
-        const API_URLs = [
-            `${currentOrigin}/api`,  // Utilise l'origine actuelle
-            'http://localhost:3000/api',
-            'http://172.29.192.1:3000/api',
-            'https://l1-v46y.onrender.com/api'
-        ];
+        const isGithub = currentOrigin.includes('github.io');
+        const API_URLs = isGithub
+            ? ['https://l1triangle-shop.onrender.com/api']
+            : [
+                `${currentOrigin}/api`,  // Utilise l'origine actuelle
+                'http://localhost:3000/api',
+                'http://172.29.192.1:3000/api',
+                'https://l1triangle-shop.onrender.com/api'
+            ];
 
         async function callAPI(endpoint, method = 'GET', body = null) {
             console.log(`📡 API Call: ${method} ${endpoint}`);
@@ -344,9 +347,13 @@
                 try {
                     const fullUrl = `${url}${endpoint}`;
                     console.log(`🔗 Trying: ${fullUrl}`);
+                    const sessionId = sessionStorage.getItem('admin_sessionId');
                     const response = await fetch(fullUrl, {
                         method,
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: {
+                            'Content-Type': 'application/json',
+                            ...(sessionId ? { 'x-session-id': sessionId } : {})
+                        },
                         body: body ? JSON.stringify(body) : null,
                         mode: 'cors'
                     });

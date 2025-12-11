@@ -4,11 +4,23 @@ if (sessionStorage.getItem('adminAuth') !== 'true') {
 }
 
 // Configuration de l'API avec détection automatique
-// En production (Vercel): utilise les chemins relatifs
-// En développement local: utilise localhost:3000
-const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-const API_URL = isLocalDev ? 'http://localhost:3000/api' : '/api';
-const API_BASES = [API_URL];
+// - GitHub Pages: utilise directement l'API Render
+// - Local: localhost:3000
+// - Production sur Render/Vercel: chemins relatifs /api
+const hostname = window.location.hostname;
+const isLocalDev = hostname === 'localhost' || hostname === '127.0.0.1';
+const isGithub = hostname.includes('github.io');
+
+const API_URL = isLocalDev
+    ? 'http://localhost:3000/api'
+    : isGithub
+        ? 'https://l1triangle-shop.onrender.com/api'
+        : '/api';
+
+const API_BASES = isGithub
+    ? ['https://l1triangle-shop.onrender.com/api']
+    : [API_URL];
+
 const API_TIMEOUT = 10000;
 const RETRY_ATTEMPTS = 3;
 

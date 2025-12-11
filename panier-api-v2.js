@@ -22,7 +22,12 @@ class APIClient {
         if (currentOrigin.includes('onrender.com')) {
             this.baseUrls = [`${currentOrigin}/api`];
             console.log('🌐 Mode production Render:', this.baseUrls[0]);
-        } 
+        }
+        // GitHub Pages doit pointer vers l'API Render
+        else if (currentOrigin.includes('github.io')) {
+            this.baseUrls = ['https://l1triangle-shop.onrender.com/api'];
+            console.log('🌐 Mode GitHub Pages → Render API');
+        }
         // Si localhost, essayer localhost uniquement
         else if (currentOrigin.includes('localhost') || currentOrigin.includes('127.0.0.1')) {
             this.baseUrls = [

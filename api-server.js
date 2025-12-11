@@ -122,8 +122,12 @@ app.get('/api/products', (req, res) => {
     try {
         const db = readDatabase();
         const products = Array.isArray(db.products) ? db.products : [];
-        console.log(`📦 GET /api/products: ${products.length} items`);
-        res.json(products);
+
+        // Ne renvoyer que les produits ajoutés par l'admin
+        const adminProducts = products.filter(p => p.addedByAdmin === true);
+
+        console.log(`📦 GET /api/products: ${adminProducts.length}/${products.length} admin items`);
+        res.json(adminProducts);
     } catch (error) {
         console.error('❌ Error:', error);
         res.status(500).json({ error: error.message });
