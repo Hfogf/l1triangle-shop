@@ -11,6 +11,11 @@ const DEFAULT_PRODUCTS = [
     { id: 'prod6', name: 'AIVONO Magic peach ice', category: 'vape', price: 2500, description: 'Vape saveur pêche', image: '💨', addedByAdmin: true }
 ];
 
+// ==================== BASE IMAGES ====================
+const IMAGE_BASE = (window.location.origin.includes('github.io'))
+    ? 'https://raw.githubusercontent.com/Hfogf/l1triangle-shop/main/'
+    : '';
+
 // ==================== CONFIGURATION API ROBUSTE ====================
 
 class APIClient {
@@ -240,13 +245,17 @@ function renderProducts(products) {
 
         console.log(`✏️ Rendu ${items.length} produits dans "${category}"`);
         
-        grid.innerHTML = items.map(p => `
+        grid.innerHTML = items.map(p => {
+            const imageUrl = (p.image && p.image.startsWith('http'))
+                ? p.image
+                : (p.image ? `${IMAGE_BASE}${encodeURIComponent(p.image)}` : 'https://via.placeholder.com/300x200?text=Produit');
+            return `
             <article class="product-card"
                      data-id="${p.id}"
                      data-name="${encodeURIComponent(p.name)}"
                      data-price="${p.price}"
                      data-image="${encodeURIComponent(p.image || '')}">
-                <img src="${p.image || 'https://via.placeholder.com/300x200?text=Produit'}" 
+                <img src="${imageUrl}" 
                      alt="${p.name}"
                      onerror="this.src='https://via.placeholder.com/300x200?text=Image'">
                 <h3>${p.name}</h3>
@@ -255,7 +264,8 @@ function renderProducts(products) {
                 <small style="opacity:.7;">Stock: ${p.stock || 'N/A'}</small>
                 <button class="product-btn add-to-cart">Ajouter au panier</button>
             </article>
-        `).join('');
+            `;
+        }).join('');
         
         totalRendered += items.length;
     });

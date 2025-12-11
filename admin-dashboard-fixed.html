@@ -290,7 +290,16 @@
     </div>
 
     <script>
-        const API_BASE = window.location.origin + '/api';
+        // Auto-détection API (GitHub Pages → Render API)
+        const hostname = window.location.hostname;
+        const isGithub = hostname.includes('github.io');
+        const isLocal = hostname === 'localhost' || hostname === '127.0.0.1';
+
+        const API_BASE = isLocal
+            ? 'http://localhost:3000/api'
+            : isGithub
+                ? 'https://l1triangle-shop.onrender.com/api'
+                : window.location.origin + '/api';
         
         function checkAuth() {
             const sessionId = sessionStorage.getItem('admin_sessionId');
